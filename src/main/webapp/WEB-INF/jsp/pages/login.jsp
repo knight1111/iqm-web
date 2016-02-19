@@ -24,7 +24,7 @@
 	<div id="center">
 		<div id="content" class="container">
 
-			<div class="alert alert-danger" role="alert" id="alert">${error}</div>
+			<div class="alert alert-danger ${empty error ? 'hide' : ''}" role="alert" id="alert">${error}</div>
 			<form class="form-horizontal" id="loginForm" action="loginAction" method="post"
 				enctype="multipart/form-data" role="form">
 				<div class="form-group">

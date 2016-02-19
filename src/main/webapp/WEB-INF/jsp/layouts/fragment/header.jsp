@@ -1,3 +1,4 @@
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <div id="header" class="container">
 	<h1 id="app" class="pull-left">Warrant</h1>
 	<h1 id="branding" class="pull-right">Thomson Reuters</h1>
@@ -21,13 +22,14 @@
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> User <b class="caret"></b>
-					</a>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown"> <shiro:principal /> <b class="caret"></b>
+				</a>
 					<ul class="dropdown-menu">
-						<li><a href="../um/userPreference">User
-								Preference</a></li>
+						<shiro:hasRole name="admin">
+							<li><a href="../user/list">User Management</a></li>
+						</shiro:hasRole>
+						<li><a href="../user/get">User Preference</a></li>
 						<li class="divider"></li>
 						<li><a href="../logout">Logout</a></li>
 					</ul></li>

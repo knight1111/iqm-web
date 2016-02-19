@@ -12,6 +12,10 @@
 	charset="UTF-8" rel="stylesheet" />
 <link rel="stylesheet" type="text/css"
 	href="../static/opensource/datatables/1.10.11/css/dataTables.bootstrap.min.css">
+<script src="../static/opensource/jquery/jquery-2.1.1.min.js"
+	type="text/javascript"></script>
+<script src="../static/opensource/bootstrap/3.2.0/js/bootstrap.min.js"
+	type="text/javascript"></script>
 </head>
 <body>
 

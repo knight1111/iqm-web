@@ -78,11 +78,6 @@
 	</div>
 </div>
 
-
-<script src="../static/opensource/jquery/jquery-2.1.1.min.js"
-	type="text/javascript"></script>
-<script src="../static/opensource/bootstrap/3.2.0/js/bootstrap.min.js"
-	type="text/javascript"></script>
 	
 <script type="text/javascript" charset="utf8"
 	src="../static/opensource/datatables/1.10.11/js/jquery.dataTables.min.js"></script>

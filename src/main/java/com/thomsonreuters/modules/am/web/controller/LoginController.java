@@ -67,8 +67,6 @@ public class LoginController extends BaseController {
 				+ "/";
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		System.err.println(username);
-		System.err.println(password);
 		// 获取HttpSession中的验证码
 		// String verifyCode = (String) request.getSession().getAttribute(
 		// "verifyCode");

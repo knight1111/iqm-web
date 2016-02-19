@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,16 +28,17 @@ public class UserController extends BaseController {
 	@Resource
 	private IUserService userService;
 
+	@RequiresRoles("admin")
 	@RequestMapping(value = "/list")
-	public String index() {
+	public String index() { 
 		return "um.listUser";
 	}
 
+	@RequiresRoles("admin")
 	@ResponseBody
 	@RequestMapping(value = "/listUser", method = RequestMethod.POST)
 	public Map<String, Object> listUser(@RequestParam String aoData)
 			throws Exception {
-
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
 		Map<String, String> aoMap = DataTablesUtils.paramStringToMap(aoData);
@@ -65,12 +68,11 @@ public class UserController extends BaseController {
 		dataMap.put("iTotalRecords", count);
 		dataMap.put("iTotalDisplayRecords", count);
 		dataMap.put("aaData", page.getList());
-		;
 
 		return dataMap;
 	}
 
-	// @RequiresRoles("admin")
+	@RequiresRoles("admin")
 	@RequestMapping(value = "/{1}", method = RequestMethod.GET)
 	public String showUser(@RequestParam String id, Model model) {
 		int userId = Integer.parseInt(id);
