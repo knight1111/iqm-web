@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+    "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+ 
+<tiles-definitions>
+
+	<!-- default definition -->
+    <definition name=".base" template="/WEB-INF/jsp/layouts/baseLayout.jsp">
+        <put-attribute name="title" value="User Management" />
+        <put-attribute name="header" value="/WEB-INF/jsp/layouts/fragment/header.jsp" />
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/main.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/jsp/layouts/fragment/footer.jsp" />
+    </definition>
+     
+    <!-- 引用基本模板   视图名 + .base -->
+    <definition name="*.base" extends=".base" >
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/{1}.jsp" />
+    </definition>
+    <definition name="*/*.base" extends=".base">
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/{1}/{2}.jsp" />
+    </definition>
+ 
+    <definition name="um.listUser" extends=".base">
+    	<put-attribute name="title" value="User Management" />
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/am/listUser.jsp" />
+    </definition>
+ 
+</tiles-definitions>

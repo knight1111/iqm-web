@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+    "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+ 
+<tiles-definitions>
+
+	<!-- default definition -->
+    <definition name="war.gateway" template="/WEB-INF/jsp/layouts/baseLayout.jsp">
+        <put-attribute name="title" value="Gateway" />
+        <put-attribute name="header" value="/WEB-INF/jsp/layouts/fragment/header.jsp" />
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/warrant/gateway.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/jsp/layouts/fragment/footer.jsp" />
+    </definition>
+ 
+</tiles-definitions>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+                        http://www.springframework.org/schema/tx
+				        http://www.springframework.org/schema/tx/spring-tx.xsd
+				        http://www.springframework.org/schema/aop
+				        http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<!-- Properties -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:app.properties" />
+			        
+	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+	<context:component-scan base-package="com.thomsonreuters.modules"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- DataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
+		<property name="url" value="${jdbc.url}" />  
+		<property name="username" value="${jdbc.username}" />  
+		<property name="password" value="${jdbc.password}" />  
+		<property name="filters" value="stat" />  
+		<property name="initialSize" value="${jdbc.initialSize}" />  
+		<property name="maxActive" value="${jdbc.maxActive}" />   
+		<property name="maxWait" value="${jdbc.maxWait}" />  
+		<property name="minIdle" value="${jdbc.minIdle}" />  
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />  
+		<property name="minEvictableIdleTimeMillis" value="300000" />  
+		<property name="validationQuery" value="SELECT 'x'" />  
+		<property name="testWhileIdle" value="true" />  
+		<property name="testOnBorrow" value="false" />  
+		<property name="testOnReturn" value="false" />  
+		<property name="poolPreparedStatements" value="true" />  
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />  
+	</bean>  
+	
+	<!-- JDBC -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	    <property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- JSR303 Bean Validator -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+	
+	<!-- MyBatis -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- auto-scan mapping.xml -->
+		<property name="mapperLocations" value="classpath:/mappings/**/*.xml"></property>
+		<property name="plugins">
+		 	<array>
+		      	<bean class="com.github.pagehelper.PageHelper">
+			        <property name="properties">
+			        	<value>
+				        	dialect=mysql
+				    	</value>
+			        </property>
+		      	</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.thomsonreuters.modules" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+	<!-- 拦截器方式配置事务 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+
+			<tx:method name="list*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- Spring aop事务管理 -->
+	<aop:config>
+		<aop:pointcut id="transactionPointcut"
+			expression="execution(* com.thomsonreuters.modules.*.service..*Impl.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut"
+			advice-ref="transactionAdvice" />
+	</aop:config>
+	
+</beans>
