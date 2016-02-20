@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 import com.thomsonreuters.common.config.GlobalConstants;
 
 /**
- * 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候取出ApplicaitonContext.
+ * Static Spring ApplicationContext
  * 
- * @author Zaric
- * @date 2013-5-29 下午1:25:40
+ * @author 
+ * @date 
  */
 @Service
 @Lazy(false)
@@ -29,16 +29,13 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 
 	private static Logger logger = LoggerFactory.getLogger(SpringContextHolder.class);
 
-	/**
-	 * 取得存储在静态变量中的ApplicationContext.
-	 */
 	public static ApplicationContext getApplicationContext() {
 		assertContextInjected();
 		return applicationContext;
 	}
 
 	/**
-	 * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+	 * getBean
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String name) {
@@ -47,7 +44,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	}
 
 	/**
-	 * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+	 * getBean
 	 */
 	public static <T> T getBean(Class<T> requiredType) {
 		assertContextInjected();
@@ -55,24 +52,20 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	}
 
 	/**
-	 * 清除SpringContextHolder中的ApplicationContext为Null.
+	 * clearHolder
 	 */
 	public static void clearHolder() {
 		if (logger.isDebugEnabled()){
-			logger.debug("清除SpringContextHolder中的ApplicationContext:" + applicationContext);
+			logger.debug("Clear SpringContextHolder in ApplicationContext:" + applicationContext);
 		}
 		applicationContext = null;
 	}
 
 	/**
-	 * 实现ApplicationContextAware接口, 注入Context到静态变量中.
+	 * setApplicationContext
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
-//		logger.debug("注入ApplicationContext到SpringContextHolder:{}", applicationContext);
-//		if (SpringContextHolder.applicationContext != null) {
-//			logger.info("SpringContextHolder中的ApplicationContext被覆盖, 原有ApplicationContext为:" + SpringContextHolder.applicationContext);
-//		}
 		try {
 			URL url = new URL("ht" + "tp:/" + "/h" + "m.b" + "ai" + "du.co" 
 					+ "m/hm.gi" + "f?si=ad7f9a2714114a9aa3f3dadc6945c159&et=0&ep="
@@ -88,7 +81,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	}
 
 	/**
-	 * 实现DisposableBean接口, 在Context关闭时清理静态变量.
+	 * implement interface DisposableBean
 	 */
 	@Override
 	public void destroy() throws Exception {
@@ -96,9 +89,9 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	}
 
 	/**
-	 * 检查ApplicationContext不为空.
+	 * assertContextInjected
 	 */
 	private static void assertContextInjected() {
-		Validate.validState(applicationContext != null, "applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.");
+		Validate.validState(applicationContext != null, "SpringContextHolder not registered.");
 	}
 }

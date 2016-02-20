@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.thomsonreuters.modules.am.domain.User;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
 @Component
 public class PasswordHelper {
 

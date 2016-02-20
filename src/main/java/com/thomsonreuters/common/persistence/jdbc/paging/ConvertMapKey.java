@@ -8,7 +8,7 @@ import java.util.Map;
 public class ConvertMapKey {
 
 	/**
-	 * 把map对象的key全部转为小写形式
+	 * keyToLower
 	 * 
 	 * @param map
 	 * @return
@@ -24,7 +24,7 @@ public class ConvertMapKey {
 	}
 
 	/**
-	 * 把list map中map对象的key全部转为小写形式
+	 * listKeyToLower
 	 * 
 	 * @param listmap
 	 * @return

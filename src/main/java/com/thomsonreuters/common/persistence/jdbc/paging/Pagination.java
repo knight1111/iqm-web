@@ -8,65 +8,59 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * 分页实体
+ * Pagination
  * 
- * @author lyh
- * @version 2013-10-10
+ * @author 
+ * @version 
  * @see Pagination
  * @since
  */
 public class Pagination implements Serializable {
-	/**
-	 * 序列号<br>
-	 */
+
 	private static final long serialVersionUID = -2554565760258955645L;
 
 	/**
-	 * 每页显示的记录数
+	 * numPerPage
 	 */
 	private int numPerPage;
 
 	/**
-	 * 记录总数 （命名必须为total 对应easyui分页）
+	 * total
 	 */
 	private int total;
 
 	/**
-	 * 总页数
+	 * totalPages
 	 */
 	private int totalPages;
 
 	/**
-	 * 当前页码
+	 * currentPage
 	 */
 	private int currentPage;
 
 	/**
-	 * 记录起始行数
+	 * startIndex
 	 */
 	private int startIndex;
 
 	/**
-	 * 记录结束行数
+	 * lastIndex
 	 */
 	private int lastIndex;
 
 	/**
-	 * 结果集存放List （命名必须为rows 对应easyui分页）
+	 * ResultList
 	 */
 	private List<Map<String, Object>> rows;
 
 	/**
-	 * 构造函数
+	 * Construction
 	 * 
 	 * @param sql
-	 *            sql语句
 	 * @param currentPage
-	 *            当前页码
 	 * @param numPerPage
-	 *            每页显示记录数
 	 * @param jdbcTemplate
-	 *            JdbcTemplate实例
 	 */
 	public Pagination(String sql, int currentPage, int numPerPage,
 			JdbcTemplate jdbcTemplate) {
@@ -77,44 +71,36 @@ public class Pagination implements Serializable {
 			throw new IllegalArgumentException(
 					"sql is blank , pls initialize ... ");
 		}
-		// 设置每页显示记录数
+
 		setNumPerPage(numPerPage);
 
-		// 设置当前页数
 		setCurrentPage(currentPage);
 
-		// 计算总记录数SQL
 		StringBuffer totalSQL = new StringBuffer(" select count(1) from ( ");
 		totalSQL.append(sql);
 		totalSQL.append(" ) ");
 
-		// 总记录数
 		setTotal(jdbcTemplate.queryForObject(totalSQL.toString(), null,
 				Integer.class));
 
-		// 计算总页数
 		setTotalPages();
 
-		// 计算起始行数
 		setStartIndex();
 
-		// 计算结束行数
 		setLastIndex();
 
-		// 拼装oracle的分页语句 （其他DB修改此处的分页关键词即可）
 		StringBuffer paginationSQL = new StringBuffer(" select * from ( ");
 		paginationSQL.append(" select row_limit.*,rownum rownum_ from ( ");
 		paginationSQL.append(sql);
 		paginationSQL.append("　) row_limit where rownum <= " + lastIndex);
 		paginationSQL.append(" ) where　rownum_ > " + startIndex);
 
-		// 装入结果集（key转为小写）
 		setRows(ConvertMapKey.listKeyToLower(jdbcTemplate
 				.queryForList(paginationSQL.toString())));
 	}
 
 	/**
-	 * 根据总记录数和每页显示记录数 计算总页数
+	 * setTotalPages
 	 * 
 	 * @see
 	 */
@@ -127,7 +113,7 @@ public class Pagination implements Serializable {
 	}
 
 	/**
-	 * 根据当前页和每页显示记录条数 计算记录开始行数
+	 * setStartIndex
 	 * 
 	 * @see
 	 */
@@ -136,7 +122,7 @@ public class Pagination implements Serializable {
 	}
 
 	/**
-	 * 计算记录结束行数
+	 * setLastIndex
 	 * 
 	 * @see
 	 */

@@ -17,8 +17,7 @@
 	<!-- Properties -->
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:app.properties" />
 			        
-	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
-	<context:component-scan base-package="com.thomsonreuters.modules"><!-- base-package 如果多个，用“,”分隔 -->
+	<context:component-scan base-package="com.thomsonreuters.modules">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
@@ -68,23 +67,22 @@
 		</property>
 	</bean>
 
-	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<!-- DAO mapper scan -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.thomsonreuters.modules" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
+	
+	<!-- Annotation, scan @Transactional -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-
-	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<!-- Transaction Manager -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	<!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-	<!-- 拦截器方式配置事务 -->
+	<!-- Transaction Advice -->
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="insert*" propagation="REQUIRED" />
@@ -97,7 +95,7 @@
 		</tx:attributes>
 	</tx:advice>
 	
-	<!-- Spring aop事务管理 -->
+	<!-- Spring AOP TransactionPointcut -->
 	<aop:config>
 		<aop:pointcut id="transactionPointcut"
 			expression="execution(* com.thomsonreuters.modules.*.service..*Impl.*(..))" />

@@ -38,20 +38,6 @@ public class DataTablesUtils {
 		return map;
 	}
 
-	private static Object invokeMethod(String className, String methodName,
-			Object[] args) throws Exception {
-
-		Class ownerClass = Class.forName(className);
-		Object owner = ownerClass.newInstance();
-		Class[] argsClass = new Class[args.length];
-
-		for (int i = 0, j = args.length; i < j; i++) {
-			argsClass[i] = args[i].getClass();
-		}
-
-		Method method = ownerClass.getMethod(methodName, argsClass);
-		return method.invoke(owner, args);
-	}
 	//
 	// public static <T> Map<String, Object> result(String aoData,
 	// Class serviceClass, String methodName) throws Exception {

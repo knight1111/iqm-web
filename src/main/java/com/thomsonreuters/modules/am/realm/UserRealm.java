@@ -12,53 +12,40 @@ import org.apache.shiro.util.ByteSource;
 import com.thomsonreuters.modules.am.domain.User;
 import com.thomsonreuters.modules.am.service.IUserService;
 
-/**
- * <p>
- * User: Zhang Kaitao
- * <p>
- * Date: 14-1-28
- * <p>
- * Version: 1.0
- */
 public class UserRealm extends AuthorizingRealm {
 	@Resource
 	private IUserService userService;
 
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(
-			PrincipalCollection principals) {
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		String username = (String) principals.getPrimaryPrincipal();
 
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		authorizationInfo.setRoles(userService.findRoles(username));
-		authorizationInfo.setStringPermissions(userService
-				.findPermissions(username));
+		authorizationInfo.setStringPermissions(userService.findPermissions(username));
 
 		return authorizationInfo;
 	}
 
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(
-			AuthenticationToken token) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
 		String username = (String) token.getPrincipal();
 
 		User user = userService.findByUsername(username);
-
 		if (user == null) {
-			throw new UnknownAccountException();// 没找到帐号
+			throw new UnknownAccountException();// UnknownAccountException
 		}
-
 		if (Boolean.TRUE.equals(user.getLocked())) {
-			throw new LockedAccountException(); // 帐号锁定
+			throw new LockedAccountException(); // LockedAccountException
 		}
 
-		// 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
-		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-				user.getUsername(), // 用户名
-				user.getPassword(), // 密码
-				ByteSource.Util.bytes(user.getCredentialsSalt()),// salt=username+salt
-				getName() // realm name
+		// AuthenticatingRealm, CredentialsMatcher -> password match
+		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getUsername(),
+				user.getPassword(), ByteSource.Util.bytes(user.getCredentialsSalt()), // salt
+																						// =
+																						// username+salt
+				getName() // RealmName
 		);
 		return authenticationInfo;
 	}

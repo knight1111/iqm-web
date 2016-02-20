@@ -21,7 +21,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thomsonreuters.common.mapper.JsonMapper;
 import com.thomsonreuters.common.utils.DateUtils;
@@ -29,8 +28,8 @@ import com.thomsonreuters.common.beanvalidator.BeanValidators;
 
 /**
  * BaseController
- * @author ThinkGem
- * @version 2013-3-23
+ * @author 
+ * @version 
  */
 public abstract class BaseController {
 
@@ -58,23 +57,20 @@ public abstract class BaseController {
 	protected String urlSuffix;
 	
 	/**
-	 * 验证Bean实例对象
+	 * validator
 	 */
 	@Autowired
 	protected Validator validator;
 
 	/**
-	 * 服务端参数有效性验证
-	 * @param object 验证的实体对象
-	 * @param groups 验证组
-	 * @return 验证成功：返回true；严重失败：将错误信息添加到 message 中
+	 * beanValidator
 	 */
 	protected boolean beanValidator(Model model, Object object, Class<?>... groups) {
 		try{
 			BeanValidators.validateWithException(validator, object, groups);
 		}catch(ConstraintViolationException ex){
 			List<String> list = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
-			list.add(0, "数据验证失败：");
+			list.add(0, "Data validation failed：");
 			addMessage(model, list.toArray(new String[]{}));
 			return false;
 		}
@@ -82,35 +78,14 @@ public abstract class BaseController {
 	}
 	
 	/**
-	 * 服务端参数有效性验证
-	 * @param object 验证的实体对象
-	 * @param groups 验证组
-	 * @return 验证成功：返回true；严重失败：将错误信息添加到 flash message 中
-	 */
-	protected boolean beanValidator(RedirectAttributes redirectAttributes, Object object, Class<?>... groups) {
-		try{
-			BeanValidators.validateWithException(validator, object, groups);
-		}catch(ConstraintViolationException ex){
-			List<String> list = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
-			list.add(0, "数据验证失败：");
-			addMessage(redirectAttributes, list.toArray(new String[]{}));
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * 服务端参数有效性验证
-	 * @param object 验证的实体对象
-	 * @param groups 验证组，不传入此参数时，同@Valid注解验证
-	 * @return 验证成功：继续执行；验证失败：抛出异常跳转400页面。
+	 * beanValidator
 	 */
 	protected void beanValidator(Object object, Class<?>... groups) {
 		BeanValidators.validateWithException(validator, object, groups);
 	}
 	
 	/**
-	 * 添加Model消息
+	 * addMessage
 	 * @param message
 	 */
 	protected void addMessage(Model model, String... messages) {
@@ -122,19 +97,7 @@ public abstract class BaseController {
 	}
 	
 	/**
-	 * 添加Flash消息
-	 * @param message
-	 */
-	protected void addMessage(RedirectAttributes redirectAttributes, String... messages) {
-		StringBuilder sb = new StringBuilder();
-		for (String message : messages){
-			sb.append(message).append(messages.length>1?"<br/>":"");
-		}
-		redirectAttributes.addFlashAttribute("message", sb.toString());
-	}
-	
-	/**
-	 * 客户端返回JSON字符串
+	 * renderJSONString
 	 * @param response
 	 * @param object
 	 * @return
@@ -144,7 +107,7 @@ public abstract class BaseController {
 	}
 	
 	/**
-	 * 客户端返回字符串
+	 * renderString
 	 * @param response
 	 * @param string
 	 * @return
@@ -162,7 +125,7 @@ public abstract class BaseController {
 	}
 
 	/**
-	 * 参数绑定异常
+	 * 400
 	 */
 	@ExceptionHandler({BindException.class, ConstraintViolationException.class, ValidationException.class})
     public String bindException() {  
@@ -170,7 +133,7 @@ public abstract class BaseController {
     }
 	
 	/**
-	 * 授权登录异常
+	 * 403
 	 */
 	@ExceptionHandler({AuthenticationException.class})
     public String authenticationException() {  
@@ -178,13 +141,13 @@ public abstract class BaseController {
     }
 	
 	/**
-	 * 初始化数据绑定
-	 * 1. 将所有传递进来的String进行HTML编码，防止XSS攻击
-	 * 2. 将字段中Date类型转换为String类型
+	 * Initial data binding
+	 * 1. String converter
+	 * 2. Date converter
 	 */
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		// String类型转换，将所有传递进来的String进行HTML编码，防止XSS攻击
+		// String converter. Avoid XSS attack
 		binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) {
@@ -196,7 +159,7 @@ public abstract class BaseController {
 				return value != null ? value.toString() : "";
 			}
 		});
-		// Date 类型转换
+		// Date converter
 		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) {

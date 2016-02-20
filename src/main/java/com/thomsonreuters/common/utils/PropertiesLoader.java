@@ -13,9 +13,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的值，但以System的Property优先.
- * @author calvin
- * @version 2013-05-15
+ * PropertiesLoader
+ * @author 
+ * @version 
  */
 public class PropertiesLoader {
 
@@ -34,7 +34,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先,取不到返回空字符串.
+	 * getValueOfProperty
 	 */
 	private String getValue(String key) {
 		String systemProperty = System.getProperty(key);
@@ -48,7 +48,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出String类型的Property，但以System的Property优先,如果都为Null则抛出异常.
+	 * getProperty, throw NoSuchElementException
 	 */
 	public String getProperty(String key) {
 		String value = getValue(key);
@@ -59,7 +59,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出String类型的Property，但以System的Property优先.如果都为Null则返回Default值.
+	 * getProperty, default value
 	 */
 	public String getProperty(String key, String defaultValue) {
 		String value = getValue(key);
@@ -67,7 +67,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都为Null或内容错误则抛出异常.
+	 * getInteger
 	 */
 	public Integer getInteger(String key) {
 		String value = getValue(key);
@@ -78,7 +78,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都为Null则返回Default值，如果内容错误则抛出异常
+	 * getInteger, default value
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
 		String value = getValue(key);
@@ -86,7 +86,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Double类型的Property，但以System的Property优先.如果都为Null或内容错误则抛出异常.
+	 * getDouble
 	 */
 	public Double getDouble(String key) {
 		String value = getValue(key);
@@ -97,7 +97,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Double类型的Property，但以System的Property优先.如果都为Null则返回Default值，如果内容错误则抛出异常
+	 * getDouble, default value
 	 */
 	public Double getDouble(String key, Integer defaultValue) {
 		String value = getValue(key);
@@ -105,7 +105,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都为Null抛出异常,如果内容不是true/false则返回false.
+	 * getBoolean
 	 */
 	public Boolean getBoolean(String key) {
 		String value = getValue(key);
@@ -116,7 +116,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都为Null则返回Default值,如果内容不为true/false则返回false.
+	 * getBoolean, default value
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
 		String value = getValue(key);
@@ -124,7 +124,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 载入多个文件, 文件路径使用Spring Resource格式.
+	 * load properties from multiple files
 	 */
 	private Properties loadProperties(String... resourcesPaths) {
 		Properties props = new Properties();

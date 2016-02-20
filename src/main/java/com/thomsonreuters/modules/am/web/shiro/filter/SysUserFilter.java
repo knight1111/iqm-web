@@ -12,14 +12,15 @@ import javax.servlet.ServletResponse;
 
 public class SysUserFilter extends PathMatchingFilter {
 
-    @Autowired
-    private IUserService userService;
+	@Autowired
+	private IUserService userService;
 
-    @Override
-    protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+	@Override
+	protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue)
+			throws Exception {
 
-        String username = (String)SecurityUtils.getSubject().getPrincipal();
-        request.setAttribute(Constants.CURRENT_USER, userService.findByUsername(username));
-        return true;
-    }
+		String username = (String) SecurityUtils.getSubject().getPrincipal();
+		request.setAttribute(Constants.CURRENT_USER, userService.findByUsername(username));
+		return true;
+	}
 }

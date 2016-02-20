@@ -10,13 +10,14 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
- * 封装各种格式的编码解码工具类.
- * 1.Commons-Codec的 hex/base64 编码
- * 2.自制的base62 编码
- * 3.Commons-Lang的xml/html escape
- * 4.JDK提供的URLEncoder
- * @author calvin
- * @version 2013-01-15
+ * Encodes 
+ * 1.Commons-Codec hex/base64 
+ * 2.Customize base62 
+ * 3.Commons-Lang xml/html escape 
+ * 4.JDK URLEncoder
+ * 
+ * @author
+ * @version
  */
 public class Encodes {
 
@@ -24,14 +25,14 @@ public class Encodes {
 	private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
 	/**
-	 * Hex编码.
+	 * Hex encode
 	 */
 	public static String encodeHex(byte[] input) {
 		return new String(Hex.encodeHex(input));
 	}
 
 	/**
-	 * Hex解码.
+	 * Hex decode
 	 */
 	public static byte[] decodeHex(String input) {
 		try {
@@ -42,14 +43,14 @@ public class Encodes {
 	}
 
 	/**
-	 * Base64编码.
+	 * Base64 encode
 	 */
 	public static String encodeBase64(byte[] input) {
 		return new String(Base64.encodeBase64(input));
 	}
-	
+
 	/**
-	 * Base64编码.
+	 * Base64 encode
 	 */
 	public static String encodeBase64(String input) {
 		try {
@@ -59,22 +60,15 @@ public class Encodes {
 		}
 	}
 
-//	/**
-//	 * Base64编码, URL安全(将Base64中的URL非法字符'+'和'/'转为'-'和'_', 见RFC3548).
-//	 */
-//	public static String encodeUrlSafeBase64(byte[] input) {
-//		return Base64.encodeBase64URLSafe(input);
-//	}
-
 	/**
-	 * Base64解码.
+	 * Base64 decode
 	 */
 	public static byte[] decodeBase64(String input) {
 		return Base64.decodeBase64(input.getBytes());
 	}
-	
+
 	/**
-	 * Base64解码.
+	 * Base64 decode
 	 */
 	public static String decodeBase64String(String input) {
 		try {
@@ -85,7 +79,7 @@ public class Encodes {
 	}
 
 	/**
-	 * Base62编码。
+	 * Base62 encode
 	 */
 	public static String encodeBase62(byte[] input) {
 		char[] chars = new char[input.length];
@@ -96,35 +90,35 @@ public class Encodes {
 	}
 
 	/**
-	 * Html 转码.
+	 * Html escape
 	 */
 	public static String escapeHtml(String html) {
 		return StringEscapeUtils.escapeHtml4(html);
 	}
 
 	/**
-	 * Html 解码.
+	 * Html unescape
 	 */
 	public static String unescapeHtml(String htmlEscaped) {
 		return StringEscapeUtils.unescapeHtml4(htmlEscaped);
 	}
 
 	/**
-	 * Xml 转码.
+	 * Xml escape
 	 */
 	public static String escapeXml(String xml) {
 		return StringEscapeUtils.escapeXml10(xml);
 	}
 
 	/**
-	 * Xml 解码.
+	 * Xml unescape
 	 */
 	public static String unescapeXml(String xmlEscaped) {
 		return StringEscapeUtils.unescapeXml(xmlEscaped);
 	}
 
 	/**
-	 * URL 编码, Encode默认为UTF-8. 
+	 * URL encode, default UTF-8
 	 */
 	public static String urlEncode(String part) {
 		try {
@@ -135,7 +129,7 @@ public class Encodes {
 	}
 
 	/**
-	 * URL 解码, Encode默认为UTF-8. 
+	 * URL decode, default UTF-8
 	 */
 	public static String urlDecode(String part) {
 

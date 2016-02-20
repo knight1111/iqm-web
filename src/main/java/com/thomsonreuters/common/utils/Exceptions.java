@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class Exceptions {
 
 	/**
-	 * 将CheckedException转换为UncheckedException.
+	 * Convert CheckedException to UncheckedException
 	 */
 	public static RuntimeException unchecked(Exception e) {
 		if (e instanceof RuntimeException) {
@@ -24,7 +24,7 @@ public class Exceptions {
 	}
 
 	/**
-	 * 将ErrorStack转化为String.
+	 * Convert ErrorStack to String
 	 */
 	public static String getStackTraceAsString(Throwable e) {
 		if (e == null){
@@ -36,7 +36,7 @@ public class Exceptions {
 	}
 
 	/**
-	 * 判断异常是否由某些底层的异常引起.
+	 * isCausedBy
 	 */
 	public static boolean isCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {
 		Throwable cause = ex.getCause();
@@ -52,7 +52,7 @@ public class Exceptions {
 	}
 
 	/**
-	 * 在request中获取异常类
+	 * getThrowable
 	 * @param request
 	 * @return 
 	 */
