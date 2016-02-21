@@ -29,7 +29,7 @@
 						<shiro:hasRole name="admin">
 							<li><a href="../user/list">User Management</a></li>
 						</shiro:hasRole>
-						<li><a href="../user/get">User Preference</a></li>
+						<li><a href="../user/find">User Preference</a></li>
 						<li class="divider"></li>
 						<li><a href="../logout">Logout</a></li>
 					</ul></li>

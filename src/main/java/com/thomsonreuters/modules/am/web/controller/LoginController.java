@@ -42,7 +42,6 @@ public class LoginController extends BaseController {
 		String password = request.getParameter("password");
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		token.setRememberMe(false);
-		logger.info("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
 		// Get Subject
 		Subject currentUser = SecurityUtils.getSubject();
 		logger.info("Start login validation for user [" + username + "]...");
@@ -52,7 +51,7 @@ public class LoginController extends BaseController {
 
 			// User isAuthenticated?
 			if (currentUser.isAuthenticated()) {
-				logger.info("User [" + username + "] authenticated sucessfully.S");
+				logger.info("User [" + username + "] authenticated sucessfully.");
 			} else {
 				token.clear();
 			}

@@ -4,10 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +34,7 @@ public class UserController extends BaseController {
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/list")
 	public String index() { 
-		return "um.listUser";
+		return "am.listUser";
 	}
 
 	@RequiresRoles("admin")
@@ -70,14 +74,29 @@ public class UserController extends BaseController {
 
 		return dataMap;
 	}
+	
+	@RequestMapping(value = "/find", method = RequestMethod.GET)
+	public String currentUser(HttpServletRequest request, Model model) {
+		Subject sub = SecurityUtils.getSubject();
+		User user = userService.findByUsername((String)sub.getPrincipal());
+		model.addAttribute("user", user);
+		return "am.userPreference";
+	}
 
 	@RequiresRoles("admin")
-	@RequestMapping(value = "/{1}", method = RequestMethod.GET)
-	public String showUser(@RequestParam String id, Model model) {
-		int userId = Integer.parseInt(id);
-		User user = this.userService.getUserById(userId);
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String findUser(@PathVariable("id") int userId, Model model) {
+		User user = userService.getUserById(userId);
 		model.addAttribute("user", user);
-		return "um.userPreference";
+		return "am.userPreference";
+	}
+	
+	@RequiresRoles("admin")
+	@RequestMapping(value = "/save/{id}", method = RequestMethod.GET)
+	public String save(@PathVariable("id") int userId, Model model) {
+		User user = userService.getUserById(userId);
+		model.addAttribute("user", user);
+		return "am.userPreference";
 	}
 
 }

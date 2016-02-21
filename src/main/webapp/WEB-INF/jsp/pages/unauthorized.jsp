@@ -4,7 +4,6 @@ response.setStatus(403);
 //获取异常类
 Throwable ex = Exceptions.getThrowable(request);
 
-out.print(ex.getStackTrace().toString());
 out.print(StringUtils.replace(ex.getMessage(), "msg:", ""));
 %>
 <%@page import="com.thomsonreuters.common.utils.Exceptions"%>

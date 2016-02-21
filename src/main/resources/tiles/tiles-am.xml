@@ -13,9 +13,14 @@
         <put-attribute name="footer" value="/WEB-INF/jsp/layouts/fragment/footer.jsp" />
     </definition>
  
-    <definition name="um.listUser" extends=".base">
+    <definition name="am.listUser" extends=".base">
     	<put-attribute name="title" value="User Management" />
         <put-attribute name="content" value="/WEB-INF/jsp/pages/am/listUser.jsp" />
+    </definition>
+    
+    <definition name="am.userPreference" extends=".base">
+    	<put-attribute name="title" value="User Preference" />
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/am/userPreference.jsp" />
     </definition>
  
 </tiles-definitions>

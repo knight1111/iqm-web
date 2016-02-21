@@ -35,7 +35,7 @@ $(document)
 										"showRowNumber" : true,
 										"aoColumns" : [
 												{
-													"mData" : "id",
+													"mData" : "username",
 													"sClass" : 'left',
 													"sWidth" : "8px"
 												},
@@ -72,7 +72,14 @@ $(document)
 																+ '<input type="button" class="btn btn-default btn-xs deleteButton" value="Delete"/>';
 														return str;
 													}
-												} ],											
+												} ],
+										"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull){ 
+											var index = iDisplayIndexFull + 1; 
+											//$('td:eq(0)', nRow).attr('data-index',$('td:eq(0)', nRow).attr('data-index')||index);
+											//$('td:eq(0)', nRow).html($('td:eq(0)', nRow).attr('data-index',index));
+											$('td:eq(0)', nRow).html(index); 
+											return nRow;
+										},
 										"fnServerData" : function(sSource,
 												aoData, fnCallback) {
 											aoData.push( 

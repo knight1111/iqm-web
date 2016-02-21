@@ -1,7 +1,7 @@
-500
+403
 
 <%
-response.setStatus(500);
+response.setStatus(403);
 
 //获取异常类
 Throwable ex = Exceptions.getThrowable(request);

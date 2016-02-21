@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
@@ -138,6 +139,14 @@ public abstract class BaseController {
 	@ExceptionHandler({AuthenticationException.class})
     public String authenticationException() {  
         return "error/403";
+    }
+	
+	/**
+	 * 500
+	 */
+	@ExceptionHandler({TypeMismatchException.class})
+    public String internalException() {  
+        return "error/500";
     }
 	
 	/**
