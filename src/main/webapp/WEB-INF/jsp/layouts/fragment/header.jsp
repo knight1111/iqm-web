@@ -14,11 +14,11 @@
 		</div>
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="../index/dashboard">Dashboard</a></li>
+				<li><a href="${pageContext.request.contextPath}/index/dashboard">Dashboard</a></li>
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Warrant<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="../warrant/gateway">Gateway</a></li>
+						<li><a href="${pageContext.request.contextPath}/warrant/gateway">Gateway</a></li>
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -27,11 +27,11 @@
 				</a>
 					<ul class="dropdown-menu">
 						<shiro:hasRole name="admin">
-							<li><a href="../user/list">User Management</a></li>
+							<li><a href="${pageContext.request.contextPath}/user/list">User Management</a></li>
 						</shiro:hasRole>
-						<li><a href="../user/find">User Preference</a></li>
+						<li><a href="${pageContext.request.contextPath}/user/find">User Preference</a></li>
 						<li class="divider"></li>
-						<li><a href="../logout">Logout</a></li>
+						<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
 					</ul></li>
 			</ul>
 		</div>

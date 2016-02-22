@@ -1,7 +1,7 @@
 <div id="content" class="container">
 	<div>
 		<ol class="breadcrumb">
-			<li><a href="../dashboard">Dashboard</a></li>
+			<li><a href="${pageContext.request.contextPath}/index/dashboard">Dashboard</a></li>
 			<li class="active">Gateway</li>
 		</ol>
 	</div>
