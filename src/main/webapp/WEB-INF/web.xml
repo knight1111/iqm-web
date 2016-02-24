@@ -61,7 +61,7 @@
 		<filter-name>shiroFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- DruidStatView -->
 	<servlet>
 		<servlet-name>DruidStatView</servlet-name>
@@ -75,7 +75,24 @@
 		<servlet-name>DruidStatView</servlet-name>
 		<url-pattern>/druid/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<!-- CAS SingleSignOutHttpSessionListener -->
+	<listener>
+		<listener-class>
+			org.jasig.cas.client.session.SingleSignOutHttpSessionListener
+		</listener-class>
+	</listener>
+
+	<!-- CAS SingleSignOutFilter -->
+	<filter>
+		<filter-name>CASSingleSignOutFilter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CASSingleSignOutFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<error-page>
 		<error-code>500</error-code>
 		<location>/WEB-INF/jsp/pages/error/500.jsp</location>
@@ -84,7 +101,7 @@
 		<error-code>404</error-code>
 		<location>/WEB-INF/jsp/pages/error/404.jsp</location>
 	</error-page>
-	
+
 	<welcome-file-list>
 		<welcome-file>/login</welcome-file>
 	</welcome-file-list>
