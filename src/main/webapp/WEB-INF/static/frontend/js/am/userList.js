@@ -2,13 +2,14 @@ var columnDnMax = 24;
 var columnUnMax = 16;
 var columnOrgMax = 10;
 
+var oTable = null;
 $(document)
 		.ready(
 				function() {
 
 					var currRow = null;
 
-					var oTable = $("#user_table")
+					oTable = $("#user_table")
 							.DataTable(
 									{
 										"bJQueryUI" : false,
@@ -28,9 +29,9 @@ $(document)
 										"bDestroy" : true,
 										"bSortCellsTop" : true,
 										"sDom" : '<"toolbar">frtip',// 'T<"clear">lfrtip',
-										"oTableTools": {
+										"oTableTools" : {
 											"sRowSelect" : "single"
-								        },
+										},
 										"sAjaxSource" : "listUser",
 										"showRowNumber" : true,
 										"aoColumns" : [
@@ -67,24 +68,33 @@ $(document)
 													"mData" : "id",
 													"sWidth" : "140px",
 													"mRender" : function(data) {
-														var str = '<input type="button" class="btn btn-default btn-xs updateButton" value="Authorization"/>'
+														var str = '<input type="button" class="btn btn-default btn-xs updateButton" value="Update"/>'
 																+ '&nbsp;&nbsp;&nbsp;&nbsp;'
 																+ '<input type="button" class="btn btn-default btn-xs deleteButton" value="Delete"/>';
 														return str;
 													}
 												} ],
-										"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull){ 
-											var index = iDisplayIndexFull + 1; 
-											//$('td:eq(0)', nRow).attr('data-index',$('td:eq(0)', nRow).attr('data-index')||index);
-											//$('td:eq(0)', nRow).html($('td:eq(0)', nRow).attr('data-index',index));
-											$('td:eq(0)', nRow).html(index); 
+										"fnRowCallback" : function(nRow, aData,
+												iDisplayIndex,
+												iDisplayIndexFull) {
+											var index = iDisplayIndexFull + 1;
+											// $('td:eq(0)',
+											// nRow).attr('data-index',$('td:eq(0)',
+											// nRow).attr('data-index')||index);
+											// $('td:eq(0)',
+											// nRow).html($('td:eq(0)',
+											// nRow).attr('data-index',index));
+											$('td:eq(0)', nRow).html(index);
 											return nRow;
 										},
 										"fnServerData" : function(sSource,
 												aoData, fnCallback) {
-											aoData.push( 
-													{ "name": "iCurrentPage", "value": this.fnPagingInfo().iPage + 1 }
-											);										
+											aoData
+													.push({
+														"name" : "iCurrentPage",
+														"value" : this
+																.fnPagingInfo().iPage + 1
+													});
 											$.ajax({
 												"type" : 'post',
 												"url" : sSource,
@@ -100,19 +110,19 @@ $(document)
 
 										}
 									});
-					
+
 					$('#user_table_filter input').unbind();
 					$('#user_table_filter input').bind('keyup', function(e) {
 						if (e.keyCode == 13) {
 							oTable.search(this.value).draw();
 						}
 					});
-					
-					$("div.toolbar").html('<input type="button" id="newUser" value="Create User" class="btn btn-default"/>');
-					
-					$('#user_table tbody').on(
-							'click',
-							'input.deleteButton',
+
+					$("div.toolbar")
+							.html(
+									'<input type="button" id="newUser" value="Create User" class="btn btn-default"/>');
+
+					$('#user_table tbody').on('click', 'input.deleteButton',
 							function() {
 								currRow = oTable.row($(this).parents('tr'));
 								var data = currRow.data();
@@ -120,108 +130,164 @@ $(document)
 								dc.find('#currId').val(data['id']);
 								dc.modal('show');
 							}).on('click', 'input.updateButton', function() {
-								currRow = oTable.row($(this).parents('tr'));
-								var data = currRow.data();
-								// var logType = data['logType'];
-								/*
-								 * if (typeof logType != undefined && logType ==
-								 * 'SUCCESS') { view(data); } else {
-								 * viewLog(data); }
-								 */
-								viewUser(data);
-
+						currRow = oTable.row($(this).parents('tr'));
+						var data = currRow.data();
+						// var logType = data['logType'];
+						/*
+						 * if (typeof logType != undefined && logType ==
+						 * 'SUCCESS') { view(data); } else { viewLog(data); }
+						 */
+						// viewUser(data);
+						showtip(data['id']);
 					});
-					
+
 					$('#newUser').bind('click', function(e) {
 						// form clear
-						window.location.href = "createUser.action";					
+						// window.location.href = "createUser.action";
+						showtip(null);
 					});
-					
-					$('#delete_ok').bind('click', 
-							function(event) {
-								event.preventDefault();
-								$('#deleteConfirm').modal('hide');
-								$.ajax({
-									url : "ajax/deleteUser.action",
-									dataType : "json",
-									data : {
-										"id" : $('#deleteConfirm #currId')
-												.val()
-									},
-									type : "POST",
-									success : function(data) {
-										if (data != null && data == 'true') {
-											currRow.remove().draw(false);
-										} else {
-											alert("delete fail");
-										}
-									},
-									error : function() {
-										alert("delete error");
-									}
-								});
 
-							});
-					
-					$('#auth_ok').bind('click', 
-							function(event) {
-								event.preventDefault();
-								$('#view').modal('hide');
-								$.ajax({
-									url : "ajax/authUser.action",
-									dataType : "json",
-									data : {
-										"id" : $('#userId').val(),
-										"roles": $('input:radio[name=roles]:checked').val()
-									},
-									type : "POST",
-									success : function(data) {
-										if (data != null && data == 'true') {
-											currRow.remove().draw(false);
-										} else {
-											alert("authentication fail");
-										}
-									},
-									error : function() {
-										alert("authentication error");
-									}
-								});
+					$('#delete_ok')
+							.bind(
+									'click',
+									function(event) {
+										event.preventDefault();
+										$('#deleteConfirm').modal('hide');
+										$
+												.ajax({
+													url : "delete/"
+															+ $(
+																	'#deleteConfirm #currId')
+																	.val(),
+													dataType : "json",
+													type : "DELETE",
+													success : function(data) {
+														if (data != null
+																&& data == '1') {
+															currRow
+																	.remove()
+																	.draw(false);
+														} else {
+															alert("delete fail");
+														}
+													},
+													error : function() {
+														alert("delete error");
+													}
+												});
 
-							});
-					
+									});
+
+					$('#auth_ok')
+							.bind(
+									'click',
+									function(event) {
+										event.preventDefault();
+										$('#view').modal('hide');
+										$
+												.ajax({
+													url : "ajax/authUser.action",
+													dataType : "json",
+													data : {
+														"id" : $('#userId')
+																.val(),
+														"roles" : $(
+																'input:radio[name=roles]:checked')
+																.val()
+													},
+													type : "POST",
+													success : function(data) {
+														if (data != null
+																&& data == 'true') {
+															currRow
+																	.remove()
+																	.draw(false);
+														} else {
+															alert("authentication fail");
+														}
+													},
+													error : function() {
+														alert("authentication error");
+													}
+												});
+
+									});
+
 				});
 
+function showtip(id, frameSrc, otitle, cssobj, cssifm) {
+	if (id) {
+		frameSrc = "form?id=" + id;
+	} else {
+		frameSrc = "form";
+	}	
+	otitle = "Form";
+	$("#NoPermissionIframe").attr("src", frameSrc);
+	$('#NoPermissionModal').modal({
+		show : true,
+		backdrop : 'static'
+	});
+	var _scrollHeight = $(document).scrollTop();
+	var wHeight = $(window).height();
+	var this_height;
+	if (cssobj && cssobj["height"])
+		this_height = cssobj["height"];
+	else
+		this_height = "420";
+	var this_top = (wHeight - this_height) / 2 + _scrollHeight + "px";
+	var this_top = (wHeight - this_height) / 2 + "px";
+
+	var mycss = cssobj || {
+		"width" : "820px",
+		"height" : "420px",
+		"top" : this_top
+	};
+	var myifmcss = cssifm || {};// iframe样式
+	$('#NoPermissionModal .modal-dialog').css(mycss).find('.modal-content')
+			.css({
+				height : '100%',
+				width : '100%'
+			}).find('h4').html(otitle || "").end().find('.modal-body').css({
+				height : '85%'
+			}).find("#NoPermissioniframe").css(myifmcss);
+	;
+
+}
+
+console.log(oTable);
 
 function viewUser(d) {
-	$.ajax({
-		url : "ajax/viewUser.action",
-		dataType : "json",
-		data : {
-			"id" : d['id']
-		},
-		type : "POST",
-		success : function(data) {
-			// $(this).text(data[index]);
-			$('#userId').val(data['id']);
-			$('span#unSpan').text(data['username']);
-			$('span#dnSpan').text(data['displayName']);
-			var roles = data['roles'];
-			var $radios = $('input:radio[name=roles]');
-			if(roles.length > 0){
-				var arr = roles.split(",");
-				for(var s in arr){
-					if(arr[s] != ""){
-						var str = '[value=' + arr[s] + ']';
-						$radios.filter(str).prop('checked', true);
-					}					
-				}				
-			}
-		    
-			$('#view').modal('show');
-		},
-		error : function() {
-			alert("Get user data error.");
-		}
-	});
+	oTable.ajax.reload(null, false);
+	// window.open("form?id=" + d['id']);
+	// $.ajax({
+	// url : "form",
+	// dataType : "json",
+	// data : {
+	// "id" : d['id']
+	// },
+	// type : "POST",
+	// success : function(data) {
+	// // // $(this).text(data[index]);
+	// // $('#userId').val(data['id']);
+	// // $('span#unSpan').text(data['username']);
+	// // $('span#dnSpan').text(data['displayName']);
+	// // var roles = data['roles'];
+	// // var $radios = $('input:radio[name=roles]');
+	// // if(roles.length > 0){
+	// // var arr = roles.split(",");
+	// // for(var s in arr){
+	// // if(arr[s] != ""){
+	// // var str = '[value=' + arr[s] + ']';
+	// // $radios.filter(str).prop('checked', true);
+	// // }
+	// // }
+	// // }
+	// //
+	// // $('#view').modal('show');
+	// },
+	// error : function() {
+	// alert("Get user data error.");
+	// }
+	// });
 
 };

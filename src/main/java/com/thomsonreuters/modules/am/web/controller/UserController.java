@@ -11,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.thomsonreuters.common.utils.StringUtils;
 import com.thomsonreuters.common.web.BaseController;
 import com.thomsonreuters.common.web.utils.DataTablesUtils;
 import com.thomsonreuters.modules.am.domain.User;
 import com.thomsonreuters.modules.am.service.IUserService;
+import com.thomsonreuters.modules.am.service.PasswordHelper;
 
 @Controller
 @RequestMapping("/user")
@@ -30,11 +33,20 @@ public class UserController extends BaseController {
 
 	@Resource
 	private IUserService userService;
+	
+	@ModelAttribute
+	public User get(@RequestParam(required=false) String id) {
+		if (StringUtils.isNotBlank(id)){
+			return userService.findUserById(Integer.valueOf(id));
+		}else{
+			return new User();
+		}
+	}
 
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/list")
 	public String index() { 
-		return "am.listUser";
+		return "am.userList";
 	}
 
 	@RequiresRoles("admin")
@@ -86,17 +98,38 @@ public class UserController extends BaseController {
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String findUser(@PathVariable("id") int userId, Model model) {
-		User user = userService.getUserById(userId);
+		User user = userService.findUserById(userId);
 		model.addAttribute("user", user);
 		return "am.userPreference";
 	}
 	
 	@RequiresRoles("admin")
-	@RequestMapping(value = "/save/{id}", method = RequestMethod.GET)
-	public String save(@PathVariable("id") int userId, Model model) {
-		User user = userService.getUserById(userId);
+	@RequestMapping(value = "/form")
+	public String form(User user, Model model) {
 		model.addAttribute("user", user);
-		return "am.userPreference";
+		return "am.userForm";
+	}
+	
+	@RequiresRoles("admin")
+	@ResponseBody
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public int save(User user, Model model) {
+		logger.info(user.toString());
+		String newPwd = user.getNewPassword();
+		if(StringUtils.isNotBlank(newPwd)){
+			PasswordHelper ph = new PasswordHelper();
+			user.setPassword(newPwd);
+			ph.encryptPassword(user);
+			logger.info(user.getPassword());
+		}		
+		return userService.save(user);
+	}
+	
+	@RequiresRoles("admin")
+	@ResponseBody
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	public int delete(@PathVariable("id") int userId, Model model) {
+		return userService.delete(userId);
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.thomsonreuters.modules.am.domain.User;
 
 public interface IUserService {
-	public User getUserById(int userId); 
+	public User findUserById(int userId); 
 	
 	/**
      * findByUsername
@@ -35,4 +35,19 @@ public interface IUserService {
      * @return
      */
     public List<User> findUsers(String username);
+    
+    /**
+     * delete
+     * @param userId
+     * @return
+     */
+    public int delete(int userId);
+    
+    /**
+     * save
+     * @param user
+     * @return
+     */
+    public int save(User user);
+    
 }

@@ -73,34 +73,35 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 	
-	<!-- Annotation, scan @Transactional -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
-
 	<!-- Transaction Manager -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-	<!-- Transaction Advice -->
+	
+	<!-- Transaction Manager annotation support, scan @Transactional -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	
+	<!--
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="insert*" propagation="REQUIRED" />
 			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
 
 			<tx:method name="list*" propagation="SUPPORTS" read-only="true" />
 			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
 			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
-	
-	<!-- Spring AOP TransactionPointcut -->
+
 	<aop:config>
 		<aop:pointcut id="transactionPointcut"
 			expression="execution(* com.thomsonreuters.modules.*.service..*Impl.*(..))" />
 		<aop:advisor pointcut-ref="transactionPointcut"
 			advice-ref="transactionAdvice" />
 	</aop:config>
+	-->
 	
 </beans>

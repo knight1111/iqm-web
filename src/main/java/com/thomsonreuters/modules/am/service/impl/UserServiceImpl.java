@@ -19,12 +19,12 @@ import com.thomsonreuters.modules.am.service.PasswordHelper;
 public class UserServiceImpl implements IUserService {
 	@Resource
 	private UserDao userDao;
-	
+
 	@Resource
 	private PasswordHelper passwordHelper;
 
 	@Override
-	public User getUserById(int userId) {
+	public User findUserById(int userId) {
 		// TODO Auto-generated method stub
 		return userDao.selectByPrimaryKey(userId);
 	}
@@ -39,8 +39,8 @@ public class UserServiceImpl implements IUserService {
 	public Set<String> findRoles(String username) {
 		// TODO Auto-generated method stub
 		List<String> l = userDao.findRoles(username);
-	    Set<String> set=new HashSet<String>();         
-        set.addAll(l);
+		Set<String> set = new HashSet<String>();
+		set.addAll(l);
 		return set;
 	}
 
@@ -48,8 +48,8 @@ public class UserServiceImpl implements IUserService {
 	public Set<String> findPermissions(String username) {
 		// TODO Auto-generated method stub
 		List<String> l = userDao.findPermissions(username);
-	    Set<String> set=new HashSet<String>();         
-        set.addAll(l);
+		Set<String> set = new HashSet<String>();
+		set.addAll(l);
 		return set;
 	}
 
@@ -57,6 +57,23 @@ public class UserServiceImpl implements IUserService {
 	public List<User> findUsers(String username) {
 		// TODO Auto-generated method stub
 		return userDao.findUsers(username);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public int delete(int userId) {
+		// TODO Auto-generated method stub
+		return userDao.deleteByPrimaryKey(userId);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public int save(User user) {
+		// TODO Auto-generated method stub
+		if (user.getId() != null) {
+			return userDao.updateByPrimaryKeySelective(user);
+		} else
+			return userDao.insertSelective(user);
 	}
 
 }

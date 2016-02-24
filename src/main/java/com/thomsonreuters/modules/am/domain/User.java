@@ -8,7 +8,10 @@ public class User implements Serializable {
 	private String password;
 	private String salt;
 
-	private Boolean locked = Boolean.FALSE;
+	private Integer locked;
+
+	private String oldPassword;
+	private String newPassword;
 
 	public Integer getId() {
 		return id;
@@ -46,12 +49,28 @@ public class User implements Serializable {
 		return username + salt;
 	}
 
-	public Boolean getLocked() {
+	public Integer getLocked() {
 		return locked;
 	}
 
-	public void setLocked(Boolean locked) {
+	public void setLocked(Integer locked) {
 		this.locked = locked;
+	}
+
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 
 	@Override
