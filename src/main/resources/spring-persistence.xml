@@ -17,7 +17,7 @@
 	<!-- Properties -->
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:app.properties" />
 			        
-	<context:component-scan base-package="com.thomsonreuters.modules">
+	<context:component-scan base-package="com.thomsonreuters">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
@@ -69,7 +69,8 @@
 
 	<!-- DAO mapper scan -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.thomsonreuters.modules" />
+		<property name="basePackage" value="com.thomsonreuters" />
+		<property name="annotationClass" value="com.thomsonreuters.common.persistence.annotation.MyBatisDao"/>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 	

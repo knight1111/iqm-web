@@ -1,6 +1,7 @@
 package com.thomsonreuters.modules.am.web.shiro.filter;
 
 import com.thomsonreuters.modules.am.Constants;
+import com.thomsonreuters.modules.am.realm.UserRealm.Principal;
 import com.thomsonreuters.modules.am.service.IUserService;
 
 import org.apache.shiro.SecurityUtils;
@@ -19,8 +20,9 @@ public class SysUserFilter extends PathMatchingFilter {
 	protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue)
 			throws Exception {
 
-		String username = (String) SecurityUtils.getSubject().getPrincipal();
-		request.setAttribute(Constants.CURRENT_USER, userService.findByUsername(username));
+		Principal p = (Principal) SecurityUtils.getSubject().getPrincipal();
+		String username = p.getUsername();
+		request.setAttribute(Constants.CURRENT_USER, userService.getByUsername(username));
 		return true;
 	}
 }

@@ -46,6 +46,12 @@ public class GlobalConstants {
 	 */
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
+	
+	/**
+	 * Success/Failure
+	 */
+	public static final String SUCCESS = "S";
+	public static final String FAILURE = "F";
 
 	/**
 	 * get Property

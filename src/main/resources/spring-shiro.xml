@@ -8,15 +8,18 @@
        http://www.springframework.org/schema/context/spring-context-4.0.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-
-    <!-- CacheManager: Ehcache -->
-    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
-    </bean>
+    
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:${ehcache.configFile}" />
+	</bean>
+	<!-- CacheManager: Ehcache -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManager" ref="cacheManager"/>
+	</bean>
 
     <!-- CredentialsMatcher -->
     <bean id="credentialsMatcher" class="com.thomsonreuters.modules.am.credentials.RetryLimitHashedCredentialsMatcher">
-        <constructor-arg ref="cacheManager"/>
+        <constructor-arg ref="shiroCacheManager"/>
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="2"/>
         <property name="storedCredentialsHexEncoded" value="true"/>
@@ -39,10 +42,10 @@
 	    <property name="authenticationCacheName" value="authenticationCache"/>
 	    <property name="authorizationCachingEnabled" value="true"/>
 	    <property name="authorizationCacheName" value="authorizationCache"/>
-	    <property name="defaultRoles" value="common"/>  
+	    <!--property name="defaultRoles" value="common"/>  
 	    <property name="defaultPermissions" value="user:create,user:update"/> 
 	    <property name="roleAttributeNames" value="roles"/>  
-    	<property name="permissionAttributeNames" value="permissions"/>
+    	<property name="permissionAttributeNames" value="permissions"/-->
 	    <property name="casServerUrlPrefix" value="${shiro.casServer.url}"/>
 	    <property name="casService" value="${shiro.client.cas}"/>
 	</bean>
@@ -68,6 +71,7 @@
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
         <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+        <property name="cacheManager" ref="shiroCacheManager" />
     </bean>
 
     <!-- SessionValidationScheduler -->
@@ -101,7 +105,7 @@
     	<!--property name="realm" ref="userRealm"/-->
         <property name="realm" ref="casRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
-        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheManager" ref="shiroCacheManager"/>
         <property name="rememberMeManager" ref="rememberMeManager"/>
         <property name="subjectFactory" ref="casSubjectFactory" />  
     </bean>
@@ -121,6 +125,10 @@
 	
 	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
 	    <property name="failureUrl" value="/casFailure"/>
+	</bean>
+	
+	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+	    <property name="redirectUrl" value="${shiro.logout.url}"/>
 	</bean>
 	
     <!-- FormAuthenticationFilter -->
@@ -143,6 +151,7 @@
                 <entry key="sysUser" value-ref="sysUserFilter"/>
                 <entry key="ssl" value-ref="sslFilter"/>
                 <entry key="cas" value-ref="casFilter"/>
+                <entry key="logout" value-ref="logoutFilter" />
             </util:map>
         </property>
         <property name="filterChainDefinitions">

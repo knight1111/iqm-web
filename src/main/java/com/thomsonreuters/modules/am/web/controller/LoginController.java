@@ -2,8 +2,6 @@ package com.thomsonreuters.modules.am.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -17,7 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.alibaba.druid.util.StringUtils;
+import com.thomsonreuters.common.utils.StringUtils;
 import com.thomsonreuters.common.web.BaseController;
 
 @Controller

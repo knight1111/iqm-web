@@ -15,45 +15,30 @@
 		<thead>
 			<tr>
 				<th>No</th>
+				<th>Role</th>
 				<th>Username</th>
+				<th>Real Name</th>
+				<th>Email</th>
 				<th>Salt</th>
 				<th>Locked</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
 	</table>
-</div>
 
-<div class="modal fade" id="NoPermissionModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">User Form</div>
-			<div class="modal-body">
-				<iframe id="NoPermissionIframe" width="100%" height="100%"
-					frameborder="0"></iframe>
+	<div class="modal fade" id="NoPermissionModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">User Form</div>
+				<div class="modal-body">
+					<iframe id="NoPermissionIframe" width="100%" height="100%"
+						frameborder="0"></iframe>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog"
-	aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">×</button>
-				<h4 class="modal-title">Delete Confirm</h4>
-			</div>
-			<div class="modal-body">Do you really want to delete this user?</div>
-			<input type="hidden" id="currId" />
-			<div class="modal-footer" style="padding: 8px;">
-				<button type="button" class="btn btn-small" data-dismiss="modal">Cancel</button>
-				<button type="button" id="delete_ok"
-					class="btn btn-default btn-small">OK</button>
-			</div>
-		</div>
-	</div>
+	<input type="hidden" id="delete_user_id" />
 </div>
 
 

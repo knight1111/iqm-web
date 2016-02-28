@@ -1,23 +1,36 @@
 package com.thomsonreuters.test;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.thomsonreuters.modules.am.domain.User;
 import com.thomsonreuters.modules.am.service.PasswordHelper;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:spring-persistence.xml" })
 public class TestPassword {
+	
+	@Resource
+	private PasswordHelper passwordHelper;
+	
 	@Test
 	public void test1() {
 		
-		String username = "test2";
+		String username = "admin";
 		
-		PasswordHelper ph = new PasswordHelper();
-		User u = new User();
-		u.setUsername(username);
-		u.setPassword(username);
+		User u = new User(-1, username);
+		u.setPassword(null);
 		u.setSalt("1");
-		ph.encryptPassword(u);
+		passwordHelper.encryptPassword(u);
 		
-		System.out.println(u.getPassword());
+		System.err.println("------------------->"+u.getPassword());
+		
+		username = null;
+		System.err.println("------------------->"+"55555".equals(username));
 	}
+
 }

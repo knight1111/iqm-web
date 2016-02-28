@@ -3,51 +3,58 @@ package com.thomsonreuters.modules.am.service;
 import java.util.List;
 import java.util.Set;
 
+import com.thomsonreuters.common.web.bean.ResultBean;
 import com.thomsonreuters.modules.am.domain.User;
 
 public interface IUserService {
-	public User findUserById(int userId); 
 	
 	/**
-     * findByUsername
+     * get
+     * @param userId
+     * @return
+     */
+	public User get(Integer userId); 
+	
+	/**
+     * getByUsername
      * @param username
      * @return
      */
-    public User findByUsername(String username);
+    public User getByUsername(String username);
 
     /**
-     * findRolesByUsername
+     * findRoles
      * @param username
      * @return
      */
     public Set<String> findRoles(String username);
 
     /**
-     * findPermissionsByUsername
+     * findPermissions
      * @param username
      * @return
      */
     public Set<String> findPermissions(String username);
     
     /**
-     * findUsers
+     * findList
      * @param username
      * @return
      */
-    public List<User> findUsers(String username);
+    public List<User> findList(String username);
     
     /**
      * delete
      * @param userId
      * @return
      */
-    public int delete(int userId);
+    public ResultBean delete(Integer userId);
     
     /**
      * save
      * @param user
      * @return
      */
-    public int save(User user);
+    public ResultBean save(User user);
     
 }

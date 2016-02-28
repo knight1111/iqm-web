@@ -7,70 +7,155 @@
 		<result column="password" property="password" jdbcType="VARCHAR" />
 		<result column="salt" property="salt" jdbcType="VARCHAR" />
 		<result column="locked" property="locked" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy.id" jdbcType="INTEGER" />
+	    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+	    <result column="modify_by" property="modifyBy.id" jdbcType="INTEGER" />
+	    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+	    <result column="role" property="role.role" jdbcType="VARCHAR" />
 	</resultMap>
-	<sql id="Base_Column_List" >id, username, password, salt, locked</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	<sql id="Base_Column_List" >id, username, password, salt, locked, name, email</sql>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
 		select
 		<include refid="Base_Column_List" />
 		from sys_users
 		where id = #{id,jdbcType=INTEGER}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >delete from sys_users
-		where id = #{id,jdbcType=INTEGER}</delete>
-	<insert id="insert" parameterType="com.thomsonreuters.modules.am.domain.User" >insert into sys_users (id, username, password,
-		salt)
-		values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-		#{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER})</insert>
-	<insert id="insertSelective" parameterType="com.thomsonreuters.modules.am.domain.User" >
-		insert into sys_users
-		<trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null" >id,</if>
-			<if test="username != null" >username,</if>
-			<if test="password != null" >password,</if>
-			<if test="salt != null" >salt,</if>
-			<if test="locked != null" >locked,</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id != null" >#{id,jdbcType=INTEGER},</if>
-			<if test="username != null" >#{username,jdbcType=VARCHAR},</if>
-			<if test="password != null" >#{password,jdbcType=VARCHAR},</if>
-			<if test="salt != null" >#{salt,jdbcType=VARCHAR},</if>
-			<if test="locked != null" >#{locked,jdbcType=INTEGER},</if>
-		</trim>
-	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.thomsonreuters.modules.am.domain.User" >
-		update sys_users
-		<set >
-			<if test="username != null" >username = #{username,jdbcType=VARCHAR},</if>
-			<if test="password != null" >password = #{password,jdbcType=VARCHAR},</if>
-			<if test="salt != null" >salt = #{salt,jdbcType=VARCHAR},</if>
-			<if test="locked != null" >locked = #{locked,jdbcType=INTEGER},</if>
-		</set>
+	<delete id="delete" parameterType="java.lang.Integer" >
+		delete from sys_users
 		where id = #{id,jdbcType=INTEGER}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="com.thomsonreuters.modules.am.domain.User" >update sys_users
-		set username = #{username,jdbcType=VARCHAR},
-		password = #{password,jdbcType=VARCHAR},
-		salt = #{salt,jdbcType=VARCHAR},
-		locked = #{locked,jdbcType=INTEGER}
-		where id = #{id,jdbcType=INTEGER}</update>
+	</delete>
+	<insert id="insert" parameterType="com.thomsonreuters.modules.am.domain.User" useGeneratedKeys="true" keyProperty="id">
+	    insert into sys_users
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="username != null">
+	        username,
+	      </if>
+	      <if test="password != null">
+	        password,
+	      </if>
+	      <if test="salt != null">
+	        salt,
+	      </if>
+	      <if test="locked != null">
+	        locked,
+	      </if>
+	      <if test="name != null">
+	        name,
+	      </if>
+	      <if test="email != null">
+	        email,
+	      </if>
+	      <if test="createBy != null">
+	        create_by,
+	      </if>
+	      <if test="createDate != null">
+	        create_date,
+	      </if>
+	      <if test="modifyBy != null">
+	        modify_by,
+	      </if>
+	      <if test="modifyDate != null">
+	        modify_date,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="username != null">
+	        #{username,jdbcType=VARCHAR},
+	      </if>
+	      <if test="password != null">
+	        #{password,jdbcType=VARCHAR},
+	      </if>
+	      <if test="salt != null">
+	        #{salt,jdbcType=VARCHAR},
+	      </if>
+	      <if test="locked != null">
+	        #{locked,jdbcType=BIT},
+	      </if>
+	      <if test="name != null">
+	        #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="email != null">
+	        #{email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="createBy != null">
+	        #{createBy.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="createDate != null">
+	        #{createDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="modifyBy != null">
+	        #{modifyBy.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="modifyDate != null">
+	        #{modifyDate,jdbcType=TIMESTAMP},
+	      </if>
+	    </trim>
+	  </insert>
+	  <update id="update" parameterType="com.thomsonreuters.modules.am.domain.User">
+	    update sys_users
+	    <set>
+	      <if test="username != null">
+	        username = #{username,jdbcType=VARCHAR},
+	      </if>
+	      <if test="password != null">
+	        password = #{password,jdbcType=VARCHAR},
+	      </if>
+	      <if test="salt != null">
+	        salt = #{salt,jdbcType=VARCHAR},
+	      </if>
+	      <if test="locked != null">
+	        locked = #{locked,jdbcType=BIT},
+	      </if>
+	      <if test="name != null">
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="email != null">
+	        email = #{email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="createBy != null">
+	        create_by = #{createBy.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="createDate != null">
+	        create_date = #{createDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="modifyBy != null">
+	        modify_by = #{modifyBy.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="modifyDate != null">
+	        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+	      </if>
+	    </set>
+	    where id = #{id,jdbcType=BIGINT}
+	  </update>
 
 	<!-- new added -->
-	<select id="findUsers" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from sys_users
-		<where>  
-	      <if test="username != null and username != ''">  
-	        username like CONCAT('%',#{username},'%')
-	      </if> 
-	    </where> 
-	</select>
-	<select id="findByUsername" resultMap="BaseResultMap" parameterType="String" >
+	<insert id="insertUserRole">
+		insert into sys_users_roles 
+		select #{id,jdbcType=BIGINT}, id from sys_roles where role = #{role.role,jdbcType=VARCHAR}
+	</insert>
+	<delete id="deleteUserRole">
+		delete from sys_users_roles WHERE user_id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+	<select id="getByUsername" resultMap="BaseResultMap" parameterType="String" >
 		select
 		<include refid="Base_Column_List" />
 		from sys_users
 		where username = #{username,jdbcType=VARCHAR}
+	</select>
+	<select id="findUsers" resultMap="BaseResultMap">
+		select r.role, u.*
+        from sys_users u 
+        left join sys_users_roles ur on u.id = ur.user_id
+        left join sys_roles r on r.id = ur.role_id       
+		<where>
+	      <if test="username != null and username != ''">  
+	        username like CONCAT('%',#{username},'%')
+	      </if> 
+	    </where> 
+	    order by r.id asc
 	</select>
 	<select id="findRoles" resultType="String" parameterType="String" >select r.role
 		from sys_users u, sys_roles r,sys_users_roles ur

@@ -1,8 +1,10 @@
 package com.thomsonreuters.modules.am.IDao;
 
+import com.thomsonreuters.common.persistence.annotation.MyBatisDao;
 import com.thomsonreuters.modules.am.domain.Role;
 
-public interface RoleMapper {
+@MyBatisDao
+public interface RoleDao {
     int deleteByPrimaryKey(Long id);
 
     int insert(Role record);

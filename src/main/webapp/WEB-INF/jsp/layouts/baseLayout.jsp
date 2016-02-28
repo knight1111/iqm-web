@@ -12,9 +12,13 @@
 	charset="UTF-8" rel="stylesheet" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/static/opensource/datatables/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/static/opensource/jquery-confirm/2.5.0/jquery-confirm.css">
 <script src="${pageContext.request.contextPath}/static/opensource/jquery/jquery-2.1.1.min.js"
 	type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/static/opensource/bootstrap/3.2.0/js/bootstrap.min.js"
+	type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/static/opensource/jquery-confirm/2.5.0/jquery-confirm.min.js"
 	type="text/javascript"></script>
 </head>
 <body>

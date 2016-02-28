@@ -1,13 +1,20 @@
-var columnDnMax = 24;
-var columnUnMax = 16;
-var columnOrgMax = 10;
-
+var columnUnMax = 20;
 var oTable = null;
+
 $(document)
 		.ready(
 				function() {
 
 					var currRow = null;
+					var message = function(title, content, autoClose) {
+						$.confirm({
+							title : title,
+							content : content,
+							confirmButton : false,
+							autoClose : autoClose,
+							backgroundDismiss : true
+						});
+					};
 
 					oTable = $("#user_table")
 							.DataTable(
@@ -34,16 +41,27 @@ $(document)
 										},
 										"sAjaxSource" : "listUser",
 										"showRowNumber" : true,
-										"aoColumns" : [
+										"aoColumns" : [												
 												{
 													"mData" : "username",
 													"sClass" : 'left',
 													"sWidth" : "8px"
 												},
 												{
+													"mData" : "role",
+													"sClass" : 'left',
+													"sWidth" : "50px",
+													"mRender" : function(data) {
+														if (data != null) {
+															data = data.role;
+														}
+														return data;
+													}
+												},
+												{
 													"mData" : "username",
 													"sClass" : 'left',
-													"sWidth" : "110px",
+													"sWidth" : "140px",
 													"mRender" : function(data) {
 														if (data != null) {
 															data = data.length > columnUnMax ? data
@@ -56,34 +74,48 @@ $(document)
 													}
 												},
 												{
+													"mData" : "name",
+													"sWidth" : "180px",
+													"sClass" : 'left'
+												},
+												{
+													"mData" : "email",
+													"sClass" : 'left'
+												},
+												{
 													"mData" : "salt",
-													"sWidth" : "50px",
+													"sWidth" : "100px",
 													"sClass" : 'left'
 												},
 												{
 													"mData" : "locked",
-													"sClass" : 'left'
+													"sWidth" : "50px",
+													"sClass" : 'left',
+													"mRender" : function(data) {
+														if (data != null
+																&& data == '0') {
+															data = 'No';
+														} else {
+															data = 'Yes';
+														}
+														return data;
+													}
 												},
 												{
 													"mData" : "id",
-													"sWidth" : "140px",
+													"sWidth" : "120px",
 													"mRender" : function(data) {
-														var str = '<input type="button" class="btn btn-default btn-xs updateButton" value="Update"/>'
+														var str = '<input type="button" class="btn btn-default btn-xs update-button" value="Update"/>'
 																+ '&nbsp;&nbsp;&nbsp;&nbsp;'
-																+ '<input type="button" class="btn btn-default btn-xs deleteButton" value="Delete"/>';
+																+ '<input type="button" class="btn btn-default btn-xs delete-button" value="Delete"/>';
 														return str;
 													}
 												} ],
 										"fnRowCallback" : function(nRow, aData,
 												iDisplayIndex,
 												iDisplayIndexFull) {
-											var index = iDisplayIndexFull + 1;
-											// $('td:eq(0)',
-											// nRow).attr('data-index',$('td:eq(0)',
-											// nRow).attr('data-index')||index);
-											// $('td:eq(0)',
-											// nRow).html($('td:eq(0)',
-											// nRow).attr('data-index',index));
+											var index = iDisplayIndexFull + 1;// set
+											// rowNumber
 											$('td:eq(0)', nRow).html(index);
 											return nRow;
 										},
@@ -120,99 +152,76 @@ $(document)
 
 					$("div.toolbar")
 							.html(
-									'<input type="button" id="newUser" value="Create User" class="btn btn-default"/>');
+									'<input type="button" id="new_user" value="Create User" class="btn btn-default"/>');
 
-					$('#user_table tbody').on('click', 'input.deleteButton',
-							function() {
-								currRow = oTable.row($(this).parents('tr'));
-								var data = currRow.data();
-								var dc = $('#deleteConfirm');
-								dc.find('#currId').val(data['id']);
-								dc.modal('show');
-							}).on('click', 'input.updateButton', function() {
-						currRow = oTable.row($(this).parents('tr'));
-						var data = currRow.data();
-						// var logType = data['logType'];
-						/*
-						 * if (typeof logType != undefined && logType ==
-						 * 'SUCCESS') { view(data); } else { viewLog(data); }
-						 */
-						// viewUser(data);
-						showtip(data['id']);
-					});
+					$('#user_table tbody')
+							.on(
+									'click',
+									'input.delete-button',
+									function() {
+										currRow = oTable.row($(this).parents(
+												'tr'));
+										var data = currRow.data();
+										$('#delete_user_id').val(data['id']);
+										$
+												.confirm({
+													title : 'Delete Confirmation',
+													content : 'Do you really want to delete this user?',
+													confirm : function() {
+														$
+																.ajax(
+																		{
+																			url : "delete/"
+																					+ $(
+																							'#delete_user_id')
+																							.val(),
+																			dataType : "json",
+																			type : "DELETE"
+																		})
+																.done(
+																		function(
+																				data) {
+																			if (data.isSuccess == 'S') {
+																				message(
+																						false,
+																						'Delete user successfully!',
+																						'cancel|3000');
+																				currRow
+																						.remove()
+																						.draw(
+																								false);
+																			} else {
+																				message(
+																						'Error Message',
+																						data.errorMessage,
+																						'cancel|8000');
+																			}
+																		})
+																.fail(
+																		function(
+																				jqXHR,
+																				textStatus,
+																				errorThrown) {
+																			message(
+																					textStatus,
+																					errorThrown,
+																					'cancel|8000');
+																		});
+													}
+												});
+									}).on(
+									'click',
+									'input.update-button',
+									function() {
+										currRow = oTable.row($(this).parents(
+												'tr'));
+										var data = currRow.data();
+										showtip(data['id']);
+									});
 
-					$('#newUser').bind('click', function(e) {
-						// form clear
-						// window.location.href = "createUser.action";
+					$('#new_user').bind('click', function(e) {
 						showtip(null);
 					});
-
-					$('#delete_ok')
-							.bind(
-									'click',
-									function(event) {
-										event.preventDefault();
-										$('#deleteConfirm').modal('hide');
-										$
-												.ajax({
-													url : "delete/"
-															+ $(
-																	'#deleteConfirm #currId')
-																	.val(),
-													dataType : "json",
-													type : "DELETE",
-													success : function(data) {
-														if (data != null
-																&& data == '1') {
-															currRow
-																	.remove()
-																	.draw(false);
-														} else {
-															alert("delete fail");
-														}
-													},
-													error : function() {
-														alert("delete error");
-													}
-												});
-
-									});
-
-					$('#auth_ok')
-							.bind(
-									'click',
-									function(event) {
-										event.preventDefault();
-										$('#view').modal('hide');
-										$
-												.ajax({
-													url : "ajax/authUser.action",
-													dataType : "json",
-													data : {
-														"id" : $('#userId')
-																.val(),
-														"roles" : $(
-																'input:radio[name=roles]:checked')
-																.val()
-													},
-													type : "POST",
-													success : function(data) {
-														if (data != null
-																&& data == 'true') {
-															currRow
-																	.remove()
-																	.draw(false);
-														} else {
-															alert("authentication fail");
-														}
-													},
-													error : function() {
-														alert("authentication error");
-													}
-												});
-
-									});
-
 				});
 
 function showtip(id, frameSrc, otitle, cssobj, cssifm) {
@@ -220,7 +229,7 @@ function showtip(id, frameSrc, otitle, cssobj, cssifm) {
 		frameSrc = "form?id=" + id;
 	} else {
 		frameSrc = "form";
-	}	
+	}
 	otitle = "Form";
 	$("#NoPermissionIframe").attr("src", frameSrc);
 	$('#NoPermissionModal').modal({
@@ -233,13 +242,13 @@ function showtip(id, frameSrc, otitle, cssobj, cssifm) {
 	if (cssobj && cssobj["height"])
 		this_height = cssobj["height"];
 	else
-		this_height = "420";
+		this_height = "520";
 	var this_top = (wHeight - this_height) / 2 + _scrollHeight + "px";
 	var this_top = (wHeight - this_height) / 2 + "px";
 
 	var mycss = cssobj || {
 		"width" : "820px",
-		"height" : "420px",
+		"height" : "520px",
 		"top" : this_top
 	};
 	var myifmcss = cssifm || {};// iframe样式
@@ -249,45 +258,9 @@ function showtip(id, frameSrc, otitle, cssobj, cssifm) {
 				width : '100%'
 			}).find('h4').html(otitle || "").end().find('.modal-body').css({
 				height : '85%'
-			}).find("#NoPermissioniframe").css(myifmcss);
-	;
-
+			}).find("#NoPermissionIframe").css(myifmcss);
 }
 
-console.log(oTable);
-
-function viewUser(d) {
+function reloadDatatables() {
 	oTable.ajax.reload(null, false);
-	// window.open("form?id=" + d['id']);
-	// $.ajax({
-	// url : "form",
-	// dataType : "json",
-	// data : {
-	// "id" : d['id']
-	// },
-	// type : "POST",
-	// success : function(data) {
-	// // // $(this).text(data[index]);
-	// // $('#userId').val(data['id']);
-	// // $('span#unSpan').text(data['username']);
-	// // $('span#dnSpan').text(data['displayName']);
-	// // var roles = data['roles'];
-	// // var $radios = $('input:radio[name=roles]');
-	// // if(roles.length > 0){
-	// // var arr = roles.split(",");
-	// // for(var s in arr){
-	// // if(arr[s] != ""){
-	// // var str = '[value=' + arr[s] + ']';
-	// // $radios.filter(str).prop('checked', true);
-	// // }
-	// // }
-	// // }
-	// //
-	// // $('#view').modal('show');
-	// },
-	// error : function() {
-	// alert("Get user data error.");
-	// }
-	// });
-
 };

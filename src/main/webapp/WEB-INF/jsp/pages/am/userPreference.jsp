@@ -10,59 +10,44 @@
 	</div>
 
 	<div>
-		<ul class="nav nav-tabs" role="tablist" id="myTabs">
-			<li role="presentation" class="active"><a href="#userPreference"
-				aria-controls="userPreference" role="tab" data-toggle="tab">User
-					Preference</a></li>
-			<li role="presentation"><a href="#resetPassword"
-				aria-controls="resetPassword" role="tab" data-toggle="tab">Reset
+		<ul class="nav nav-tabs" role="tablist" id="user_tabs">
+			<li role="presentation" class="active"><a
+				href="#user_preference" aria-controls="user_preference" role="tab"
+				data-toggle="tab">User Preference</a></li>
+			<li role="presentation"><a href="#reset_password"
+				aria-controls="reset_password" role="tab" data-toggle="tab">Reset
 					Password</a></li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content" style="padding-bottom: 10px;">
 			<div role="tabpanel" class="tab-pane active padding-top"
-				id="userPreference">
-				<div>
-					<div class="alert alert-success hidden" role="alert" id="upInfo">
-						<strong>Update successfully!</strong>
-					</div>
-					<div class="alert alert-danger hidden" role="alert" id="upAlert">
-						<strong>Update Failed!</strong> <span></span>
-					</div>
-				</div>
-				<form:form id="inputForm" modelAttribute="user" action="save"
+				id="user_preference">
+				<form:form id="user_form" modelAttribute="user" action=""
 					method="post" class="form-horizontal">
 					<form:hidden path="id" />
-
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Username: </label>
 						<div class="col-sm-6">
 							<form:input path="username" id="username" name="username"
-								htmlEscape="false" maxlength="50" class="required form-control"
-								placeholder="Username" readonly="true" />
+								htmlEscape="false" class="form-control" placeholder="Username"
+								readonly="true" />
 						</div>
 					</div>
-
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Locked: </label>
+						<label class="col-sm-2 control-label">Real Name: </label>
 						<div class="col-sm-6">
-							<form:radiobutton path="locked" value="0" />
-							false
-							<form:radiobutton path="locked" value="1" />
-							true
+							<form:input path="name" id="name" name="name" htmlEscape="false"
+								class="form-control" placeholder="Real Name" />
 						</div>
 					</div>
-					
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Salt: </label>
+						<label class="col-sm-2 control-label">Email: </label>
 						<div class="col-sm-6">
-							<form:input path="salt" id="salt" name="salt"
-								htmlEscape="false" maxlength="50" class="form-control"
-								placeholder="Salt" readonly="true" />
+							<form:input path="email" id="email" name="email"
+								htmlEscape="false" class="form-control" placeholder="Email" />
 						</div>
 					</div>
-
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<button type="submit" class="btn btn-default">Submit</button>
@@ -70,53 +55,28 @@
 					</div>
 				</form:form>
 			</div>
-			<div role="tabpanel" class="tab-pane padding-top" id="resetPassword">
-				<div>
-					<div class="alert alert-success hidden" role="alert" id="rpInfo">
-						<strong>Reset password successfully!</strong>
-					</div>
-					<div class="alert alert-danger hidden" role="alert" id="rpAlert">
-						<strong>Reset password Failed!</strong> <span></span>
-					</div>
-				</div>
-				<!-- div class="control-group">
-						<label class="control-label">Password:</label>
-						<div class="controls">
-							<input id="newPassword" name="newPassword" type="password"
-								value="" maxlength="50" minlength="3"
-								class="${empty user.id?'required':''}" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Confirm password:</label>
-						<div class="controls">
-							<input id="confirmNewPassword" name="confirmNewPassword"
-								type="password" value="" maxlength="50" minlength="3"
-								equalTo="#newPassword" />
-						</div>
-					</div-->
-				<form class="form-horizontal" id="pwdForm" method="post"
+			<div role="tabpanel" class="tab-pane padding-top" id="reset_password">
+				<form class="form-horizontal" id="pwd_form" method="post"
 					enctype="multipart/form-data">
-					<input type="hidden" name="id" value="" />
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Old password: </label>
 						<div class="col-sm-6">
-							<input type="password" class="form-control" id="oldPwd"
+							<input type="password" class="form-control" id="old_pwd"
 								name="oldPwd" placeholder="Old Password" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">New password: </label>
 						<div class="col-sm-6">
-							<input type="password" class="form-control" id="newPwd"
+							<input type="password" class="form-control" id="new_pwd"
 								name="newPwd" placeholder="New Password" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Confirm Password: </label>
 						<div class="col-sm-6">
-							<input type="password" class="form-control" id="confirmNewPwd"
-								name=confirmNewPwd placeholder="Confirm New Password" />
+							<input type="password" class="form-control" id="confirm_new_pwd"
+								name="confirmNewPwd" placeholder="Confirm New Password" />
 						</div>
 					</div>
 					<div class="form-group">

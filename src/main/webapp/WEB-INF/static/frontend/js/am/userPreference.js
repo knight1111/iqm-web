@@ -1,214 +1,229 @@
 jQuery.validator.addMethod("notEqual", function(value, element, param) {
-  return this.optional(element) || value != $(param).val();
+	return this.optional(element) || value != $(param).val();
 }, "Please specify a different value");
 
 var upValidator = function() {
-    var handleSubmit = function() {
-        $('#userForm').validate({
-            errorElement : 'span',
-            errorClass : 'help-block',
-            focusInvalid : false,
-            rules : {
-            	displayName : {
-                    required : true,
-                    maxlength: 240
-                },
-                email : {
-                	email:true,
-                	maxlength: 240
-                },
-                orgType : {
-                    maxlength: 30
-                },
-                userLocale : {
-                    maxlength: 10
-                }
-            },
-            messages : {
-            	displayName : {
-                    required : "Display name is required.",
-                    maxlength : "Display name can't be more than 240 bytes."
-                },
-                email : {
-                	email: "Please enter a valid email address.",  
-                	maxlength : "Email can't be more than 240 bytes."
-                },
-                orgType : {
-                	maxlength : "Org type can't be more than 30 bytes."
-                },
-                userLocale : {
-                	maxlength : "Locale can't be more than 10 bytes."
-                }
-            },
+	var handleSubmit = function(message) {
+		$('#user_form')
+				.validate(
+						{
+							errorElement : 'span',
+							errorClass : 'help-block',
+							focusInvalid : false,
+							rules : {
+								name : {
+									required : true,
+									maxlength : 45
+								},
+								email : {
+									email : true,
+									maxlength : 45
+								}
+							},
+							messages : {
+								name : {
+									required : "Real Name is required.",
+									maxlength : "Real Name can't be more than 45 bytes."
+								},
+								email : {
+									email : "Please enter a valid email address.",
+									maxlength : "Email can't be more than 45 bytes."
+								}
+							},
 
-            highlight : function(element) {
-                $(element).closest('.form-group').addClass('has-error');
-            },
+							highlight : function(element) {
+								$(element).closest('.form-group').addClass(
+										'has-error');
+							},
 
-            success : function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
+							success : function(label) {
+								label.closest('.form-group').removeClass(
+										'has-error');
+								label.remove();
+							},
 
-            errorPlacement : function(error, element) {
-                element.parent('div').append(error);
-            },
+							errorPlacement : function(error, element) {
+								element.parent('div').append(error);
+							},
 
-            submitHandler : function(form) {
-                //form.submit();
-            	$.ajax({
-                    type: 'post',
-                    url: '../ajax/saveUserPreference.action',
-                    data: $(form).serialize(),
-                    dataType : 'json'
-                })
-                .done(function (response) {
-                    if (response == 'true') {               
-                    	showInfo('upInfo', null, true);                     
-                    } else {
-                    	showInfo('upAlert', null, false);
-                    }
-                });
-                return false; 
-            }
-        });
+							submitHandler : function(form) {
+								// form.submit();
+								$
+										.ajax({
+											type : 'post',
+											url : 'save',
+											data : $(form).serialize(),
+											dataType : 'json'
+										})
+										.done(
+												function(data) {
+													if (data.isSuccess == 'S') {
+														message(
+																false,
+																'Update user preference successfully!',
+																'cancel|3000');
+													} else {
+														message(
+																'Error Message',
+																data.errorMessage,
+																'cancel|8000');
+													}
+												}).fail(
+												function(jqXHR, textStatus,
+														errorThrown) {
+													message(textStatus,
+															errorThrown,
+															'cancel|8000');
+												});
+								return false;
+							}
+						});
 
-        $('#userForm input').keypress(function(e) {
-            if (e.which == 13) {
-            	var uf = $('#userForm');
-                if (uf.validate().form()) {
-                    uf.submit();
-                }
-                return false;
-            }
-        });
-    }
-    return {
-        init : function() {
-            handleSubmit();
-        }
-    };
+		$('#user_form input').keypress(function(e) {
+			if (e.which == 13) {
+				var uf = $('#user_form');
+				if (uf.validate().form()) {
+					uf.submit();
+				}
+				return false;
+			}
+		});
+	}
+	return {
+		init : function(message) {
+			handleSubmit(message);
+		}
+	};
 
 }();
 
 var rpValidator = function() {
-    var handleSubmit = function() {
-        $('#pwdForm').validate({
-            errorElement : 'span',
-            errorClass : 'help-block',
-            focusInvalid : false,
-            rules : {
-            	oldPwd : {
-                    required : true,
-                    maxlength: 16
-                },
-                newPwd : {
-                	required : true,
-                	notEqual: "#oldPwd",
-                	minlength: 6,
-                	maxlength: 16
-                },
-                confirmNewPwd : {
-                	required : true,
-                    equalTo: "#newPwd"
-                }
-            },
-            messages : {
-            	oldPwd : {
-                    required : "Old Password is required.",
-                    maxlength : "Old Password can't be more than 16 bytes."
-                },
-                newPwd : {
-                	required : "New Password is required.",
-                	notEqual: "Please specify a different password.",
-                    minlength : "New Password can't be less than 6 bytes.",
-                    maxlength : "New Password can't be more than 16 bytes."
-                },
-                confirmNewPwd : {
-                	required : "Please re-type new password.",
-                    equalTo : "Please enter the same password."
-                }
-            },
+	var handleSubmit = function(message) {
+		$('#pwd_form')
+				.validate(
+						{
+							errorElement : 'span',
+							errorClass : 'help-block',
+							focusInvalid : false,
+							rules : {
+								oldPwd : {
+									required : true,
+									maxlength : 16
+								},
+								newPwd : {
+									required : true,
+									notEqual : "#old_pwd",
+									minlength : 6,
+									maxlength : 16
+								},
+								confirmNewPwd : {
+									required : true,
+									equalTo : "#new_pwd"
+								}
+							},
+							messages : {
+								oldPwd : {
+									required : "Old Password is required.",
+									maxlength : "Old Password can't be more than 16 bytes."
+								},
+								newPwd : {
+									required : "New Password is required.",
+									notEqual : "Please specify a different password.",
+									minlength : "New Password can't be less than 6 bytes.",
+									maxlength : "New Password can't be more than 16 bytes."
+								},
+								confirmNewPwd : {
+									required : "Please re-type new password.",
+									equalTo : "Please enter the same password."
+								}
+							},
 
-            highlight : function(element) {
-                $(element).closest('.form-group').addClass('has-error');
-            },
+							highlight : function(element) {
+								$(element).closest('.form-group').addClass(
+										'has-error');
+							},
 
-            success : function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
+							success : function(label) {
+								label.closest('.form-group').removeClass(
+										'has-error');
+								label.remove();
+							},
 
-            errorPlacement : function(error, element) {
-                element.parent('div').append(error);
-            },
+							errorPlacement : function(error, element) {
+								element.parent('div').append(error);
+							},
 
-            submitHandler : function(form) {
-                //form.submit();
-            	$.ajax({
-                    type: 'post',
-                    url: '../ajax/resetPassword.action',
-                    data: $(form).serialize(),
-                    dataType : 'json'
-                })
-                .done(function (response) {
-                    if (response == 'S') {               
-                        showInfo('rpInfo', null, true);                   
-                    } else {
-                    	showInfo('rpAlert', response, false);
-                    }
-                    
-                    //clear form
-                    form.reset();
-                });
-                return false; 
-            }
-        });
+							submitHandler : function(form) {
+								// form.submit();
+								$
+										.ajax({
+											type : 'post',
+											url : 'savePassword',
+											data : $(form).serialize(),
+											dataType : 'json'
+										})
+										.done(
+												function(data) {
+													if (data.isSuccess == 'S') {
+														// clear form
+														form.reset();
 
-        $('#userForm input').keypress(function(e) {
-            if (e.which == 13) {
-            	var pf = $('#pwdForm');
-                if (pf.validate().form()) {
-                    pf.submit();
-                }
-                return false;
-            }
-        });
-    }
-    return {
-        init : function() {
-            handleSubmit();
-        }
-    };
+														message(
+																false,
+																'Update password successfully!',
+																'cancel|3000');
+													} else {
+														message(
+																'Error Message',
+																data.errorMessage,
+																'cancel|8000');
+													}
+												}).fail(
+												function(jqXHR, textStatus,
+														errorThrown) {
+													message(data.errorMessage,
+															errorThrown,
+															'cancel|8000');
+												});
+								return false;
+							}
+						});
+
+		$('#pwd_form input').keypress(function(e) {
+			if (e.which == 13) {
+				var pf = $('#pwd_form');
+				if (pf.validate().form()) {
+					pf.submit();
+				}
+				return false;
+			}
+		});
+	}
+	return {
+		init : function(message) {
+			handleSubmit(message);
+		}
+	};
 
 }();
 
-function showInfo(id, msg, hideFlag){
-	var hidden = 'hidden';
-	var $a = $('#'+id);
-	$a.siblings().addClass(hidden);
-	if(msg != undefined && msg != null){
-		$a.find('span').text(msg);
-	}
-    //$a.show();
-	if($a.hasClass(hidden)){
-		$a.removeClass(hidden);
-	}
-	if(hideFlag == true){
-	    setTimeout(function(){
-	    	$a.addClass(hidden);
-	    }, 3000); 
-	}
-}
-
 $(document).ready(function() {
+	
+	var message = function(title, content, autoClose) {
+		$.confirm({
+			title : title,
+			content : content,
+			confirmButton : false,
+			autoClose : autoClose,
+			backgroundDismiss : true
+		});
+	};
 
-	$('#myTabs a').click(function(e) {
+	$('#user_tabs a').click(function(e) {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-	
-	upValidator.init();
-	rpValidator.init();
-});
 
+	upValidator.init(message);
+	rpValidator.init(message);
+});

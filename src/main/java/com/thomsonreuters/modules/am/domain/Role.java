@@ -1,43 +1,44 @@
 package com.thomsonreuters.modules.am.domain;
 
-public class Role {
-    private Long id;
+import java.io.Serializable;
 
-    private String role;
+import com.thomsonreuters.common.persistence.DataEntity;
 
-    private String description;
+public class Role extends DataEntity<Role> implements Serializable {
 
-    private Boolean available;
+	private String role;
+	private String description;
+	private Boolean available;
+	
+	public Role() {
+		super();
+	}
+	
+	public Role(Integer id){
+		super(id);
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getRole() {
+		return role;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setRole(String role) {
+		this.role = role == null ? null : role.trim();
+	}
 
-    public String getRole() {
-        return role;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setRole(String role) {
-        this.role = role == null ? null : role.trim();
-    }
+	public void setDescription(String description) {
+		this.description = description == null ? null : description.trim();
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public Boolean getAvailable() {
+		return available;
+	}
 
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
 }
