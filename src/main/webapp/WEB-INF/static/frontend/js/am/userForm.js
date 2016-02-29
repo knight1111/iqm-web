@@ -1,8 +1,7 @@
 var userValidator = function() {
 	var userId = $('#user_id').val();
-	console.log('userId:'+userId);
 	var isNew = (userId == null || userId == '');
-	console.log('isNew:'+isNew);
+
 	var handleSubmit = function(message) {
 		$('#user_form')
 				.validate(
@@ -100,7 +99,7 @@ var userValidator = function() {
 													if (data.isSuccess == 'S') {
 														var parent = window.parent;
 														var m = parent
-																.jQuery('#NoPermissionModal');
+																.jQuery('#user_modal');
 														m.modal('hide');
 
 														parent
@@ -156,7 +155,7 @@ $(document).ready(function() {
 
 	$("#close_button").click(function() {
 		var parent = window.parent;
-		var m = parent.jQuery('#NoPermissionModal');
+		var m = parent.jQuery('#user_modal');
 		m.modal('hide');
 	});
 });

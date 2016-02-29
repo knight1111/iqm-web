@@ -19,31 +19,31 @@ import com.thomsonreuters.modules.am.service.IUserService;
 @ContextConfiguration(locations = { "classpath:spring-persistence.xml" })
 public class TestMybatis {
 	private static Logger logger = Logger.getLogger(TestMybatis.class);
-	// private ApplicationContext ac = null;
-	@Resource
-	private IUserService userService = null;
 
-	// @Before
-	// public void before() {
-	// ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-	// userService = (IUserService) ac.getBean("userService");
-	// }
-	
+	@Resource
+	private IUserService userService;
 
 	@Test
-	public void test1() {
-//		User user = userService.findByUsername("admin");
-//		System.err.println(user.getUsername());
-//		// logger.info("值："+user.getUsername());
-//		// logger.info(JSON.toJSONString(user));
-//		logger.info(user.getUsername());
-//		logger.info(user.getPassword());
+	public void test() {
+		User user = userService.getByUsername("admin");
+		logger.info(user.getUsername());
+		logger.info(user.getName());
 	}
-	
+
 	@Test
 	public void testUserSave() {
-		User user = userService.get(1);
-//		User user = userService.getByUsername("admin");
-		logger.info(user);
+		User user = userService.getByUsername("222");
+		if (user != null) {
+			user.setName("NewTwo");
+			logger.info(userService.save(user).getIsSuccess());
+		}
 	}
+
+//	@Test
+//	public void testUserDelete() {
+//		User user = userService.getByUsername("111");
+//		if (user != null) {
+//			logger.info(userService.delete(user).getIsSuccess());
+//		}
+//	}
 }

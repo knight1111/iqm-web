@@ -26,12 +26,12 @@
 		</thead>
 	</table>
 
-	<div class="modal fade" id="NoPermissionModal">
+	<div class="modal fade" id="user_modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">User Form</div>
 				<div class="modal-body">
-					<iframe id="NoPermissionIframe" width="100%" height="100%"
+					<iframe id="user_iframe" width="100%" height="100%"
 						frameborder="0"></iframe>
 				</div>
 			</div>

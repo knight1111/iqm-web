@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.thomsonreuters.common.config.GlobalConstants;
 import com.thomsonreuters.common.service.BaseService;
 import com.thomsonreuters.common.utils.StringUtils;
@@ -16,6 +19,7 @@ import com.thomsonreuters.modules.am.IDao.UserDao;
 import com.thomsonreuters.modules.am.domain.User;
 import com.thomsonreuters.modules.am.service.IUserService;
 import com.thomsonreuters.modules.am.service.PasswordHelper;
+import com.thomsonreuters.modules.am.utils.UserUtils;
 
 @Service("userService")
 @Transactional(readOnly = true)
@@ -29,13 +33,15 @@ public class UserServiceImpl extends BaseService implements IUserService {
 	@Override
 	public User get(Integer userId) {
 		// TODO Auto-generated method stub
-		return userDao.get(userId);
+		//return userDao.get(userId);
+		return UserUtils.get(userId);
 	}
 
 	@Override
 	public User getByUsername(String username) {
 		// TODO Auto-generated method stub
-		return userDao.getByUsername(username);
+		//return userDao.getByUsername(username);
+		return UserUtils.getByUsername(username);
 	}
 
 	@Override
@@ -57,17 +63,31 @@ public class UserServiceImpl extends BaseService implements IUserService {
 	}
 
 	@Override
-	public List<User> findList(String username) {
+	public List<User> findList(String searchCriteria) {
 		// TODO Auto-generated method stub
-		return userDao.findUsers(username);
+		return userDao.findUsers(searchCriteria);
+	}
+
+	@Override
+	public PageInfo<User> findList(Integer currentPage, Integer displayLength,
+			String searchCriteria) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage, displayLength);
+		PageInfo<User> page = new PageInfo<User>(
+				userDao.findUsers(searchCriteria));
+		return page;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public ResultBean delete(Integer userId) {
+	public ResultBean delete(User user) {
 		// TODO Auto-generated method stub
 		try {
-			userDao.delete(userId);
+			userDao.delete(user);
+			if (user.getId() != null) {
+				userDao.deleteUserRole(user);
+			}
+			UserUtils.clearCache(user);
 			return new ResultBean();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -95,6 +115,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 					userDao.insertUserRole(user);
 				}
 			}
+			UserUtils.clearCache(user);
 			return new ResultBean();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

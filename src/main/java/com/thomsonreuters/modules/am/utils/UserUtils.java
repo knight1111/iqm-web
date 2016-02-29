@@ -46,9 +46,9 @@ public class UserUtils {
 				return null;
 			}
 			// user.setRoleList(roleDao.findList(new Role(user)));
-			// CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-			// CacheUtils.put(USER_CACHE,
-			// USER_CACHE_LOGIN_NAME_ + user.getUsername(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			CacheUtils.put(USER_CACHE,
+					USER_CACHE_LOGIN_NAME_ + user.getUsername(), user);
 		}
 		return user;
 	}
@@ -59,18 +59,18 @@ public class UserUtils {
 	 * @param loginName
 	 * @return
 	 */
-	public static User getByLoginName(String loginName) {
+	public static User getByUsername(String username) {
 		User user = (User) CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_
-				+ loginName);
+				+ username);
 		if (user == null) {
-			user = userDao.getByUsername(loginName);
+			user = userDao.getByUsername(username);
 			if (user == null) {
 				return null;
 			}
 			// user.setRoleList(roleDao.findList(new Role(user)));
-			// CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-			// CacheUtils.put(USER_CACHE,
-			// USER_CACHE_LOGIN_NAME_ + user.getUsername(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			CacheUtils.put(USER_CACHE,
+					USER_CACHE_LOGIN_NAME_ + user.getUsername(), user);
 		}
 		return user;
 	}

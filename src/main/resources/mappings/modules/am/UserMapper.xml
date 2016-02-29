@@ -17,12 +17,13 @@
 	</resultMap>
 	<sql id="Base_Column_List" >id, username, password, salt, locked, name, email</sql>
 	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-		select
-		<include refid="Base_Column_List" />
-		from sys_users
-		where id = #{id,jdbcType=INTEGER}
+		select r.role, u.*
+        from sys_users u 
+        left join sys_users_roles ur on u.id = ur.user_id
+        left join sys_roles r on r.id = ur.role_id       
+		where u.id = #{id,jdbcType=INTEGER}
 	</select>
-	<delete id="delete" parameterType="java.lang.Integer" >
+	<delete id="delete" parameterType="com.thomsonreuters.modules.am.domain.User" >
 		delete from sys_users
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
@@ -140,9 +141,10 @@
 	</delete>
 	
 	<select id="getByUsername" resultMap="BaseResultMap" parameterType="String" >
-		select
-		<include refid="Base_Column_List" />
-		from sys_users
+		select r.role, u.*
+        from sys_users u 
+        left join sys_users_roles ur on u.id = ur.user_id
+        left join sys_roles r on r.id = ur.role_id       
 		where username = #{username,jdbcType=VARCHAR}
 	</select>
 	<select id="findUsers" resultMap="BaseResultMap">
@@ -155,7 +157,7 @@
 	        username like CONCAT('%',#{username},'%')
 	      </if> 
 	    </where> 
-	    order by r.id asc
+	    order by r.id asc, u.create_date desc
 	</select>
 	<select id="findRoles" resultType="String" parameterType="String" >select r.role
 		from sys_users u, sys_roles r,sys_users_roles ur

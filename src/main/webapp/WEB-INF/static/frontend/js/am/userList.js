@@ -231,8 +231,8 @@ function showtip(id, frameSrc, otitle, cssobj, cssifm) {
 		frameSrc = "form";
 	}
 	otitle = "Form";
-	$("#NoPermissionIframe").attr("src", frameSrc);
-	$('#NoPermissionModal').modal({
+	$("#user_iframe").attr("src", frameSrc);
+	$('#user_modal').modal({
 		show : true,
 		backdrop : 'static'
 	});
@@ -252,13 +252,13 @@ function showtip(id, frameSrc, otitle, cssobj, cssifm) {
 		"top" : this_top
 	};
 	var myifmcss = cssifm || {};// iframe样式
-	$('#NoPermissionModal .modal-dialog').css(mycss).find('.modal-content')
+	$('#user_modal .modal-dialog').css(mycss).find('.modal-content')
 			.css({
 				height : '100%',
 				width : '100%'
 			}).find('h4').html(otitle || "").end().find('.modal-body').css({
 				height : '85%'
-			}).find("#NoPermissionIframe").css(myifmcss);
+			}).find("#user_iframe").css(myifmcss);
 }
 
 function reloadDatatables() {

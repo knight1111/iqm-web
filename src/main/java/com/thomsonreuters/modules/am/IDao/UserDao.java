@@ -11,9 +11,7 @@ import com.thomsonreuters.modules.am.domain.User;
 @MyBatisDao
 public interface UserDao extends CrudDao<User>{
     
-	int delete(Integer id);
-	
-    User get(Integer id);
+	User get(Integer id);
    
     User getByUsername(String username);
 

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.thomsonreuters.common.config.GlobalConstants;
 import com.thomsonreuters.common.utils.StringUtils;
@@ -35,7 +34,7 @@ public class UserController extends BaseController {
 
 	@Resource
 	private IUserService userService;
-	
+
 	@Resource
 	private PasswordHelper passwordHelper;
 
@@ -62,7 +61,6 @@ public class UserController extends BaseController {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
 		Map<String, String> aoMap = DataTablesUtils.paramStringToMap(aoData);
-
 		String sEcho = "0";
 		String iCurrentPage = "1";
 		String iDisplayLength = "10";
@@ -77,12 +75,11 @@ public class UserController extends BaseController {
 			sSearch = aoMap.get("sSearch");
 		}
 
-		PageHelper.startPage(Integer.valueOf(iCurrentPage),
-				Integer.valueOf(iDisplayLength));
-
-		PageInfo<User> page = new PageInfo<User>(userService.findList(sSearch));
+		PageInfo<User> page = userService.findList(
+				Integer.valueOf(iCurrentPage), Integer.valueOf(iDisplayLength),
+				sSearch);
 		count = (int) page.getTotal();
-		initEcho = Integer.parseInt(sEcho) + 1; 
+		initEcho = Integer.parseInt(sEcho) + 1;
 
 		dataMap.put("sEcho", initEcho);
 		dataMap.put("iTotalRecords", count);
@@ -119,7 +116,6 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResultBean save(User user, Model model) {
-		// logger.info("------------------------->" + user.getRole().getId());
 		String newPwd = user.getNewPassword();
 		if (StringUtils.isNotBlank(newPwd)) {
 			user.setPassword(newPwd);
@@ -127,7 +123,7 @@ public class UserController extends BaseController {
 		}
 		return userService.save(user);
 	}
- 
+
 	@ResponseBody
 	@RequestMapping(value = "/savePassword", method = RequestMethod.POST)
 	public ResultBean savePassword(@RequestParam String oldPwd,
@@ -136,9 +132,10 @@ public class UserController extends BaseController {
 		User user = userService.getByUsername(p.getUsername());
 
 		String currPwd = user.getPassword();
-		if(!currPwd.equals(passwordHelper.encryptPassword(oldPwd,
-				user.getUsername() + user.getSalt()))){
-			return new ResultBean(GlobalConstants.FAILURE, "Old password is not correct!");
+		if (!currPwd.equals(passwordHelper.encryptPassword(oldPwd,
+				user.getUsername() + user.getSalt()))) {
+			return new ResultBean(GlobalConstants.FAILURE,
+					"Old password is not correct!");
 		}
 
 		user.setPassword(newPwd);
@@ -151,7 +148,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public ResultBean delete(@PathVariable("id") int userId, Model model) {
-		return userService.delete(userId);
+		return userService.delete(new User(userId));
 	}
 
 }

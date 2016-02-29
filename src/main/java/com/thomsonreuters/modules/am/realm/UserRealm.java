@@ -82,20 +82,20 @@ public class UserRealm extends AuthorizingRealm {
 	}
 	
 	/**
-	 * 授权用户信息
+	 * Principal
 	 */
 	public static class Principal implements Serializable {
 
 		private static final long serialVersionUID = 1L;
 		
-		private Integer id; // 编号
-		private String username; // 登录名
-		private String name; // 姓名
+		private Integer id; 
+		private String username; 
+		private String name; 
 
 		public Principal(User user) {
 			this.id = user.getId();
 			this.username = user.getUsername();
-			this.name = null;//user.getName();
+			this.name = user.getName();
 		}
 
 		public Integer getId() {
@@ -119,7 +119,7 @@ public class UserRealm extends AuthorizingRealm {
 //		}
 
 		/**
-		 * 获取SESSIONID
+		 * getSessionid
 		 */
 		public String getSessionid() {
 			try{
