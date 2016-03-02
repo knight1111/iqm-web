@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.thomsonreuters.common.annotation.SystemControllerLog;
 import com.thomsonreuters.common.config.GlobalConstants;
 import com.thomsonreuters.common.utils.StringUtils;
 import com.thomsonreuters.common.web.BaseController;
@@ -32,10 +32,10 @@ import com.thomsonreuters.modules.am.service.PasswordHelper;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-	@Resource
+	@Autowired
 	private IUserService userService;
 
-	@Resource
+	@Autowired
 	private PasswordHelper passwordHelper;
 
 	@ModelAttribute
@@ -47,6 +47,7 @@ public class UserController extends BaseController {
 		}
 	}
 
+	@SystemControllerLog(description = "UserController - list")
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/list")
 	public String index() {
@@ -59,6 +60,7 @@ public class UserController extends BaseController {
 		return userService.findList(null);
 	}
 
+	@SystemControllerLog(description = "UserController - listUser")
 	@RequiresRoles("admin")
 	@ResponseBody
 	@RequestMapping(value = "/listUser", method = RequestMethod.POST)
@@ -95,6 +97,7 @@ public class UserController extends BaseController {
 		return dataMap;
 	}
 
+	@SystemControllerLog(description = "UserController - find")
 	@RequestMapping(value = "/find", method = RequestMethod.GET)
 	public String currentUser(Model model) {
 		Principal p = (Principal) SecurityUtils.getSubject().getPrincipal();
@@ -103,6 +106,7 @@ public class UserController extends BaseController {
 		return "am.userPreference";
 	}
 
+	@SystemControllerLog(description = "UserController - {userId}")
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String findUser(@PathVariable("id") int userId, Model model) {
@@ -111,6 +115,7 @@ public class UserController extends BaseController {
 		return "am.userPreference";
 	}
 
+	@SystemControllerLog(description = "UserController - form")
 	@RequiresRoles("admin")
 	@RequestMapping(value = "/form")
 	public String form(User user, Model model) {
@@ -118,6 +123,7 @@ public class UserController extends BaseController {
 		return "am.userForm";
 	}
 
+	@SystemControllerLog(description = "UserController - save")
 	// @RequiresRoles("admin")
 	@ResponseBody
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -130,6 +136,7 @@ public class UserController extends BaseController {
 		return userService.save(user);
 	}
 
+	@SystemControllerLog(description = "UserController - savePassword")
 	@ResponseBody
 	@RequestMapping(value = "/savePassword", method = RequestMethod.POST)
 	public ResultBean savePassword(@RequestParam String oldPwd,
@@ -150,6 +157,7 @@ public class UserController extends BaseController {
 		return userService.save(user);
 	}
 
+	@SystemControllerLog(description = "UserController - delete")
 	@RequiresRoles("admin")
 	@ResponseBody
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)

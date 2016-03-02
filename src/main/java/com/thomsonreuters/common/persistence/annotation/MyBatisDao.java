@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * MyBatisDAO
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Component
+@Repository
 public @interface MyBatisDao {
 	
 	/**

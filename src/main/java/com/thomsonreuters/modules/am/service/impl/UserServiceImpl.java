@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.thomsonreuters.common.annotation.SystemServiceLog;
 import com.thomsonreuters.common.config.GlobalConstants;
 import com.thomsonreuters.common.service.BaseService;
 import com.thomsonreuters.common.utils.StringUtils;
@@ -24,23 +24,23 @@ import com.thomsonreuters.modules.am.utils.UserUtils;
 @Service("userService")
 @Transactional(readOnly = true)
 public class UserServiceImpl extends BaseService implements IUserService {
-	@Resource
+	@Autowired
 	private UserDao userDao;
 
-	@Resource
+	@Autowired
 	private PasswordHelper passwordHelper;
 
 	@Override
+	@SystemServiceLog(description = "UserServiceImpl - get(userId)")
 	public User get(Integer userId) {
 		// TODO Auto-generated method stub
-		//return userDao.get(userId);
 		return UserUtils.get(userId);
 	}
 
 	@Override
+	@SystemServiceLog(description = "UserServiceImpl - getByUsername(cusername)")
 	public User getByUsername(String username) {
 		// TODO Auto-generated method stub
-		//return userDao.getByUsername(username);
 		return UserUtils.getByUsername(username);
 	}
 
@@ -69,6 +69,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 	}
 
 	@Override
+	@SystemServiceLog(description = "UserServiceImpl - findList(currentPage, displayLength, searchCriteria)")
 	public PageInfo<User> findList(Integer currentPage, Integer displayLength,
 			String searchCriteria) {
 		// TODO Auto-generated method stub
@@ -80,6 +81,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
 	@Override
 	@Transactional(readOnly = false)
+	@SystemServiceLog(description = "UserServiceImpl - delete(user)")
 	public ResultBean delete(User user) {
 		// TODO Auto-generated method stub
 		try {
@@ -99,6 +101,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
 	@Override
 	@Transactional(readOnly = false)
+	@SystemServiceLog(description = "UserServiceImpl - save(user)")
 	public ResultBean save(User user) {
 		// TODO Auto-generated method stub
 		try {
