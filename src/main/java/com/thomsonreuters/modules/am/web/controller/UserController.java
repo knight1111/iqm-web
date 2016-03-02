@@ -1,10 +1,10 @@
 package com.thomsonreuters.modules.am.web.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -53,6 +53,12 @@ public class UserController extends BaseController {
 		return "am.userList";
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/listAllUser", method = RequestMethod.POST)
+	public List<User> listAllUser() {
+		return userService.findList(null);
+	}
+
 	@RequiresRoles("admin")
 	@ResponseBody
 	@RequestMapping(value = "/listUser", method = RequestMethod.POST)
@@ -90,7 +96,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping(value = "/find", method = RequestMethod.GET)
-	public String currentUser(HttpServletRequest request, Model model) {
+	public String currentUser(Model model) {
 		Principal p = (Principal) SecurityUtils.getSubject().getPrincipal();
 		User user = userService.getByUsername(p.getUsername());
 		model.addAttribute("user", user);

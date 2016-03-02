@@ -46,7 +46,7 @@ public interface IUserService {
 	 * 
 	 * @param searchCriteria
 	 * @return
-	 */
+	 */  
 	public List<User> findList(String searchCriteria);
 	
 	/**

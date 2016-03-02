@@ -28,6 +28,11 @@ public class LoginController extends BaseController {
 	public String login() {
 		return "login";
 	}
+	
+	@RequestMapping(value = "/angular")
+	public String angular() {
+		return "angular/user";
+	}
 
 	/**
 	 * loginAction

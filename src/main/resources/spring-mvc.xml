@@ -4,12 +4,15 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
                         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
                         http://www.springframework.org/schema/context  
                         http://www.springframework.org/schema/context/spring-context-4.0.xsd  
                         http://www.springframework.org/schema/mvc  
-                        http://www.springframework.org/schema/mvc/spring-mvc.xsd">                       
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/aop 
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">                       
     
     <!-- Properties -->
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:app.properties" />
@@ -22,32 +25,13 @@
 
 	<mvc:view-controller path="/" view-name="forward:/index/dashboard"/> 
 	<mvc:resources mapping="/static/**" location="/WEB-INF/static/" cache-period="31536000"/>
+	<mvc:resources mapping="/templates/**" location="/WEB-INF/templates/" cache-period="31536000"/>
 		
 	<mvc:interceptors>  
 	    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />  
 	</mvc:interceptors>
 	
 	<mvc:annotation-driven/>
-	
-	<!-- Json processing (using jackson) -->
-	<bean id="mappingJacksonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-		<property name="supportedMediaTypes">
-			<list>
-				<value>text/html;charset=UTF-8</value>
-			</list>
-		</property>
-	</bean>
-	
-	<!-- SpringMVC annotation support -->
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<ref bean="mappingJacksonHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
 		
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 	    <property name="order" value="1" />
@@ -68,6 +52,7 @@
         <property name="maxInMemorySize" value="40960" />  
     </bean> 
 
+	<aop:aspectj-autoproxy proxy-target-class="true" /> 
     <!--aop:config proxy-target-class="true"></aop:config-->
     <!-- Enable Shiro Annotations for Spring-configured beans. -->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
