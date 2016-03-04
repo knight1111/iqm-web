@@ -1,0 +1,96 @@
+<div class="modal fade" id="editDiv" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">123</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="editForm" name="empList"
+					ng-submit="UpdateInfo(currentUser)" novalidate>
+
+					<div class="form-group">
+						<label for="username" class="col-sm-2 control-label">Username:</label>
+						<span class="col-sm-8" style="padding-top:7px;">{{currentUser.username}}</span>
+						<!--input type="text"
+							class="form-control" ng-model="currentUser.username"
+							value="{{currentUser.username}}" readonly="true"/-->
+					</div>
+
+					<div class="form-group">
+						<label for="salt" class="col-sm-2 control-label">Salt:</label> <span
+							class="col-sm-8" style="padding-top:7px;">{{currentUser.salt}}</span>
+						<!--input type="text"
+							class="form-control" ng-model="currentUser.salt"
+							value="{{currentUser.salt}}" readonly="true" /-->
+					</div>
+
+					<div class="form-group">
+						<label for="password" class="col-sm-2 control-label">Password:</label>
+						<div class="col-sm-8">
+							<input type="password" name="password" class="form-control"
+								placeholder="Password" ng-model="user.newPassword"
+								ng-minlength="6" ng-maxlength="16" ng-required="true" />
+							<p class="text-danger"
+								ng-show="empList.password.$dirty && empList.password.$error.required">Password
+								is invalid!</p>
+							<p ng-show="empList.password.$error.minlength"
+								class="text-danger">Password is too short.</p>
+							<p ng-show="empList.password.$error.maxlength"
+								class="text-danger">Password is too long.</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">Real
+							Name:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control"
+								ng-model="currentUser.name" name="name"
+								value="{{currentUser.name}}" required>
+							<p class="text-danger"
+								ng-show="empList.name.$invalid && empList.name.$dirty">Real
+								name is Empty!</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="email" class="col-sm-2 control-label">Email:</label>
+						<div class="col-sm-8">
+							<input type="email" name="email" class="form-control"
+								ng-model="currentUser.email" value="{{currentUser.email}}">
+							<p class="text-danger"
+								ng-show="empList.email.$invalid && empList.email.$dirty">Invalid
+								Email!</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="locked" class="col-sm-2 control-label">Locked:</label>
+						<div class="col-sm-8">
+							<input type="radio" ng-model="currentUser.locked" value="0">false
+							<input type="radio" name="locked" ng-model="currentUser.locked"
+								value="1">true
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="role" class="col-sm-2 control-label">Role:</label>
+						<div class="col-sm-8">
+							<input type="radio" name="role" value="admin"
+								ng-model="user.role">Admin <input type="radio"
+								name="role" value="common" ng-model="user.role">Common
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button class="btn btn-warning" ng-disabled="empList.$invalid"
+						ng-click="updateInfo(currentUser)">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

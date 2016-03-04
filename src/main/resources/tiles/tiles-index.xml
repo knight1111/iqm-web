@@ -12,5 +12,10 @@
         <put-attribute name="content" value="/WEB-INF/jsp/pages/dashboard/dashboard.jsp" />
         <put-attribute name="footer" value="/WEB-INF/jsp/layouts/fragment/footer.jsp" />
     </definition>
+    
+    <definition name="index.angular" extends="index.dashboard">
+    	<put-attribute name="title" value="Angularjs CRUD" />
+        <put-attribute name="content" value="/WEB-INF/jsp/pages/angular/user.jsp" />
+    </definition>
  
 </tiles-definitions>

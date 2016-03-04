@@ -4,6 +4,11 @@ var oTable = null;
 $(document)
 		.ready(
 				function() {
+					
+					$('#am_tabs a').click(function(e) {
+						e.preventDefault();
+						$(this).tab('show');
+					});
 
 					var currRow = null;
 					var message = function(title, content, autoClose) {

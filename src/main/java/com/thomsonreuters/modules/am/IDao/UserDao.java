@@ -9,19 +9,19 @@ import com.thomsonreuters.common.persistence.annotation.MyBatisDao;
 import com.thomsonreuters.modules.am.domain.User;
 
 @MyBatisDao
-public interface UserDao extends CrudDao<User>{
-    
+public interface UserDao extends CrudDao<User> {
+
 	User get(Integer id);
-   
-    User getByUsername(String username);
 
-    List<String> findRoles(String username);
+	User getByUsername(String username);
 
-    List<String> findPermissions(String username);
-    
-    List<User> findUsers(@Param("username") String username);
-    
-    int insertUserRole(User record);
-    
-    int deleteUserRole(User record);
+	List<String> findRoles(String username);
+
+	List<String> findPermissions(String username);
+
+	List<User> findUsers(@Param("username") String username);
+
+	int insertUserRole(User record);
+
+	int deleteUserRole(User record);
 }

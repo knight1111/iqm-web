@@ -18,7 +18,6 @@ import com.thomsonreuters.common.web.bean.ResultBean;
 import com.thomsonreuters.modules.am.IDao.UserDao;
 import com.thomsonreuters.modules.am.domain.User;
 import com.thomsonreuters.modules.am.service.IUserService;
-import com.thomsonreuters.modules.am.service.PasswordHelper;
 import com.thomsonreuters.modules.am.utils.UserUtils;
 
 @Service("userService")
@@ -26,9 +25,6 @@ import com.thomsonreuters.modules.am.utils.UserUtils;
 public class UserServiceImpl extends BaseService implements IUserService {
 	@Autowired
 	private UserDao userDao;
-
-	@Autowired
-	private PasswordHelper passwordHelper;
 
 	@Override
 	@SystemServiceLog(description = "UserServiceImpl - get(userId)")
@@ -104,6 +100,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
 	@SystemServiceLog(description = "UserServiceImpl - save(user)")
 	public ResultBean save(User user) {
 		// TODO Auto-generated method stub
+		System.err.println("------------------------>"+user.getId());
+		System.err.println("------------------------>"+user.getPassword());
 		try {
 			if (user.getId() != null) {
 				user.preUpdate();

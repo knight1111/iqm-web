@@ -31,7 +31,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(value = "/angular")
 	public String angular() {
-		return "angular/user";
+		return "index.angular";
 	}
 
 	/**

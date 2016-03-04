@@ -14,10 +14,10 @@ public interface CrudDao<T> extends BaseDao {
 	/**
 	 * getSingleRow
 	 * 
-	 * @param id
+	 * @param name
 	 * @return
 	 */
-	public T get(String id);
+	public T get(String name);
 
 	/**
 	 * getSingleRow
@@ -28,20 +28,11 @@ public interface CrudDao<T> extends BaseDao {
 	public T get(T entity);
 
 	/**
-	 * findList
+	 * findAll
 	 * 
-	 * @param entity
 	 * @return
 	 */
-	public List<T> findList(T entity);
-
-	/**
-	 * findAllList
-	 * 
-	 * @param entity
-	 * @return
-	 */
-	public List<T> findAllList(T entity);
+	public List<T> findAll();
 
 	/**
 	 * insert
