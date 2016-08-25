@@ -11,7 +11,7 @@
 
 		<!-- main version setting -->
 		<spring.version>4.2.3.RELEASE</spring.version>
-		<validator.version>5.1.1.Final</validator.version>
+		<validator.version>4.3.2.Final</validator.version>
 		<mybatis.version>3.3.0</mybatis.version>
 		<mybatis-spring.version>1.2.2</mybatis-spring.version>
 		<shiro.version>1.2.4</shiro.version>
@@ -36,7 +36,7 @@
 		<oracle.driver.version>10.2.0.4.0</oracle.driver.version>
 
 		<!-- environment setting -->
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>1.7</jdk.version>
 		<tomcat.version>2.2</tomcat.version>
 		<webserver.port>8080</webserver.port>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
